@@ -1,3 +1,56 @@
+async function handleSubmit(e, sheet) {
+  e.preventDefault();
+  const form = e.target; // The form element
+  const name = form.name.value.trim(); // Assuming your input has name="name"
+  const email = form.email.value.trim(); // Assuming your input has name="phone"
+  const service = form.service.value.trim(); // Assuming your input has name="phone"
+  // // Validate inputs
+  if (!name || !email || !service) {
+    console.log("الرجاء إدخال الاسم ورقم الهاتف والخدمة.", "warning");
+    return;
+  }
+  console.log(name, email, service, sheet);
+  
+  // Show progress bar
+  const progressContainer = document.getElementById("preloader");
+  progressContainer.classList.remove("d-none");
+
+  try {
+    const response = await fetch('submit-sheet.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        name: name,
+        email: phone,
+        service: form.service.value.trim(),
+        compound: sheet
+      })
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      name.value = "";
+      email.value = "";
+      service.value = "";
+      window.location.href = 'thank_you.html';
+
+    } else {
+        preloader.classList.add('hidden');
+        throw new Error(result.error || "Submission failed");
+
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    preloader.classList.add('hidden');
+    console.log("حدث خطأ، برجاء المحاولة مرة أخرى.", "danger");
+  } finally {
+    progressContainer.classList.add("d-none");
+    preloader.classList.add('hidden');
+  }
+}
+
 (function ($) {
     "use strict";
 
