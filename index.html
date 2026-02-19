@@ -1,228 +1,345 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 
 <head>
     <meta charset="utf-8">
-    <title>Startup - Startup Website Template</title>
+    <title>Ajyal - شريكك الرسمي لـ Odoo ERP في مصر</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
-
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <meta content="Odoo ERP, شريك Odoo مصر, برنامج محاسبة, نظام ERP" name="keywords">
+    <meta content="Ajyal - حلول Odoo ERP المتكاملة لإدارة شركتك بالكامل" name="description">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #06A3DA;
+            --secondary: #F57E57;
+            --dark: #091E3E;
+            --light: #EEF9FF;
+        }
 
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+        * { font-family: 'Cairo', 'Nunito', sans-serif; }
+
+        body { overflow-x: hidden; }
+
+        /*** Spinner ***/
+        #spinner {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .5s ease-out, visibility 0s linear .5s;
+            z-index: 99999;
+        }
+        #spinner.show {
+            transition: opacity .5s ease-out, visibility 0s linear 0s;
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .back-to-top {
+            position: fixed;
+            display: none;
+            right: 45px;
+            bottom: 45px;
+            z-index: 99;
+        }
+
+        /*** Heading ***/
+        h1, h2, h3, .fw-bold { font-weight: 700 !important; }
+
+        /*** Button ***/
+        .btn {
+            font-weight: 600;
+            transition: .5s;
+        }
+        .btn-primary, .btn-secondary { color: #FFFFFF; }
+        .btn-square { width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center; }
+        .btn-sm-square { width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; }
+        .btn-lg-square { width: 48px; height: 48px; padding: 0; display: flex; align-items: center; justify-content: center; }
+
+        /*** Navbar ***/
+        .navbar .dropdown-toggle::after { border: none; content: "\f107"; font-family: "Font Awesome 5 Free"; font-weight: 900; vertical-align: middle; margin-left: 8px; }
+        .navbar-light .navbar-nav .nav-link { margin-right: 30px; padding: 25px 0; color: #FFFFFF; font-size: 15px; font-weight: 600; outline: none; }
+        .navbar-light .navbar-nav .nav-link:hover, .navbar-light .navbar-nav .nav-link.active { color: var(--primary); }
+        @media (max-width: 991.98px) {
+            .navbar-light .navbar-nav .nav-link { margin-left: 0; padding: 10px 0; }
+        }
+        .navbar-light { background: var(--dark) !important; }
+        .navbar-light.sticky-top { top: -100px; transition: .5s; }
+
+        /*** Hero Carousel ***/
+        @media (max-width: 768px) {
+            .carousel-caption h1 { font-size: 28px; }
+        }
+        .carousel-caption { top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(to bottom, rgba(9, 30, 62, .7), rgba(9, 30, 62, .7)); }
+
+        /*** Section Title ***/
+        .section-title::before {
+            position: absolute;
+            content: "";
+            width: 150px;
+            height: 5px;
+            bottom: 0;
+            left: 0;
+            background: var(--primary);
+        }
+        .section-title.text-center::before { left: 50%; transform: translateX(-50%); }
+        .section-title.text-center::after {
+            position: absolute;
+            content: "";
+            width: 6px;
+            height: 5px;
+            bottom: 0;
+            left: 50%;
+            background: #FFFFFF;
+            animation: move-btn 3s ease-in-out infinite;
+        }
+        @keyframes move-btn {
+            0% { margin-left: -72px; }
+            50% { margin-left: 72px; }
+            100% { margin-left: -72px; }
+        }
+        .section-title-sm::before { height: 3px; }
+
+        /*** Service ***/
+        .service-item {
+            position: relative;
+            height: 300px;
+            padding: 0 30px;
+            transition: .5s;
+        }
+        .service-item .service-icon {
+            margin: 0 auto 30px auto;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('../img/icon-shape-primary.png') center center no-repeat;
+            background-size: contain;
+            background-color: var(--primary);
+        }
+        .service-item a.btn {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+        }
+        .service-item:hover a.btn { opacity: 1; }
+        .service-item:hover { background: var(--dark) !important; }
+        .service-item:hover * { color: #FFFFFF !important; }
+        .service-item:hover .service-icon { background: url('../img/icon-shape-white.png') center center no-repeat; background-size: contain; background-color: var(--primary); }
+
+        /*** Pricing ***/
+        .pricing .nav { padding: 2px; }
+        .pricing .nav-link { padding: 10px 30px; background: none; color: var(--primary); border: 2px solid var(--primary); }
+        .pricing .nav-link.active { background: var(--primary); color: #FFFFFF; }
+
+        /*** Blog ***/
+        .blog-item .blog-img { position: relative; overflow: hidden; }
+        .blog-item .blog-img img { transition: .5s; }
+        .blog-item:hover .blog-img img { transform: scale(1.1); }
+
+        /*** Footer ***/
+        .footer .btn.btn-link {
+            display: block;
+            margin-bottom: 5px;
+            padding: 0;
+            text-align: left;
+            font-size: 15px;
+            font-weight: normal;
+            text-transform: capitalize;
+            transition: .3s;
+        }
+        .footer .btn.btn-link::before {
+            position: relative;
+            content: "\f105";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            color: var(--primary);
+            margin-left: 10px;
+        }
+        .footer .btn.btn-link:hover { letter-spacing: 1px; box-shadow: none; }
+        .footer .copyright { border-top: 1px solid rgba(256, 256, 256, .1); }
+        .footer .copyright a { color: var(--light); }
+        .footer .footer-about { background: var(--primary); }
+
+        /*** Counter ***/
+        .counter-item { padding: 25px; }
+        .counter-item .counter-icon { width: 70px; height: 70px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+
+        /*** Module Cards ***/
+        .module-card { transition: .3s; border: 1px solid #e0e0e0; border-radius: 10px; padding: 25px; margin-bottom: 20px; background: #fff; }
+        .module-card:hover { box-shadow: 0 10px 30px rgba(6,163,218,.15); border-color: var(--primary); transform: translateY(-3px); }
+        .module-card h5 { color: var(--primary); }
+
+        /*** Industry Buttons ***/
+        .industry-btn { border: 2px solid var(--primary); color: var(--primary); border-radius: 30px; padding: 10px 25px; margin: 5px; font-weight: 600; cursor: pointer; transition: .3s; background: #fff; }
+        .industry-btn:hover, .industry-btn.active { background: var(--primary); color: #fff; }
+
+        /*** Animated Numbers ***/
+        .counter-number { font-size: 48px; font-weight: 800; color: var(--primary); }
+
+        /*** RTL fixes ***/
+        .section-title::before { right: 0; left: auto; }
+        .section-title.text-center::before { right: 50%; transform: translateX(50%); }
+        .btn.btn-link::before { margin-right: 0; margin-left: 10px; }
+        .navbar-light .navbar-nav .nav-link { margin-right: 0; margin-left: 30px; }
+        .dropdown-menu { text-align: right; }
+        .footer .btn.btn-link::before { margin-left: 10px; }
+        .link-animated a { direction: rtl; }
+        .d-flex.mb-2 { direction: rtl; }
+
+        /*** WOW animation fallback ***/
+        .wow { visibility: visible !important; animation-name: fadeIn; animation-duration: 0.8s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Spinner */
+        .spinner { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .bg-primary { background: var(--primary) !important; }
+        .text-primary { color: var(--primary) !important; }
+        .btn-primary { background: var(--primary) !important; border-color: var(--primary) !important; }
+        .btn-outline-light:hover { color: var(--primary) !important; }
+
+        /* Industry section */
+        #industry-content { display: none; animation: fadeIn 0.5s ease; }
+        #industry-content.show { display: block; }
+
+        /* Modules detailed section */
+        .module-detail { display: none; }
+        .module-detail.active { display: block; }
+        .module-tab-btn { cursor: pointer; border: 2px solid var(--primary); background: #fff; color: var(--primary); border-radius: 8px; padding: 10px 20px; margin: 5px; transition: .3s; font-weight: 600; }
+        .module-tab-btn:hover, .module-tab-btn.active { background: var(--primary); color: #fff; }
+
+        .feature-item { display: flex; align-items: flex-start; margin-bottom: 15px; direction: rtl; }
+        .feature-item i { color: var(--primary); margin-left: 12px; margin-top: 4px; flex-shrink: 0; }
+
+        .carousel-item img { height: 600px; object-fit: cover; }
+        @media (max-width: 768px) { .carousel-item img { height: 400px; } }
+    </style>
 </head>
 
 <body>
-    <!-- Spinner Start -->
+    <!-- Spinner -->
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner"></div>
     </div>
-    <!-- Spinner End -->
 
-
-    <!-- Topbar Start -->
+    <!-- Topbar -->
     <div class="container-fluid bg-dark px-5 d-none d-lg-block">
         <div class="row gx-0">
-            <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+            <div class="col-lg-8 text-center text-lg-end mb-2 mb-lg-0">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
-                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>123 Street, New York, USA</small>
-                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>+012 345 6789</small>
-                    <small class="text-light"><i class="fa fa-envelope-open me-2"></i>info@example.com</small>
+                    <small class="ms-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>القاهرة، مصر</small>
+                    <small class="ms-3 text-light"><i class="fa fa-phone-alt me-2"></i>+20 100 000 0000</small>
+                    <small class="text-light"><i class="fa fa-envelope-open me-2"></i>info@ajyal-erp.com</small>
                 </div>
             </div>
-            <div class="col-lg-4 text-center text-lg-end">
+            <div class="col-lg-4 text-center text-lg-start">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
-                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-facebook-f fw-normal"></i></a>
-                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-linkedin-in fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-linkedin-in fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-whatsapp fw-normal"></i></a>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Topbar End -->
 
-
-    <!-- Navbar & Carousel Start -->
+    <!-- Navbar & Carousel -->
     <div class="container-fluid position-relative p-0">
         <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
             <a href="index.html" class="navbar-brand p-0">
-                <a href="index.html" class="navbar-brand p-0">
-                    <img src="img/logo.png" alt="AJYAL Logo" style="height: 90px;">
-                </a>
-                            </a>
+                <h1 class="m-0 text-white" style="font-size:32px; font-weight:800;">
+                    <span style="color: var(--primary);">Ajyal</span>
+                </h1>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
-                    <a href="index.html" class="nav-item nav-link active">Home</a>
-                    <a href="about.html" class="nav-item nav-link">About</a>
-                    <a href="service.html" class="nav-item nav-link">Services</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Blog</a>
-                        <div class="dropdown-menu m-0">
-                            <a href="blog.html" class="dropdown-item">Blog Grid</a>
-                            <a href="detail.html" class="dropdown-item">Blog Detail</a>
-                        </div>
-                    </div>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                        <div class="dropdown-menu m-0">
-                            <a href="price.html" class="dropdown-item">Pricing Plan</a>
-                            <a href="feature.html" class="dropdown-item">Our features</a>
-                            <a href="team.html" class="dropdown-item">Team Members</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                            <a href="quote.html" class="dropdown-item">Free Quote</a>
-                        </div>
-                    </div>
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                    <a href="#home" class="nav-item nav-link active">الرئيسية</a>
+                    <a href="#about" class="nav-item nav-link">من نحن</a>
+                    <a href="#services" class="nav-item nav-link">الخدمات</a>
+                    <a href="#modules" class="nav-item nav-link">الموديولات</a>
+                    <a href="#contact" class="nav-item nav-link">تواصل معنا</a>
                 </div>
-                <butaton type="button" class="btn text-primary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-search"></i></butaton>
-                <a href="https://htmlcodex.com/startup-company-website-template" class="btn btn-primary py-2 px-4 ms-3">Download Pro Version</a>
+                <a href="#contact" class="btn btn-primary py-2 px-4 ms-3">ابدأ التجربة المجانية</a>
             </div>
         </nav>
 
-        <div id="header-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <!-- Carousel -->
+        <div id="header-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" id="home">
             <div class="carousel-inner">
-        
                 <!-- Slide 1 -->
                 <div class="carousel-item active">
-                    <img class="w-100" src="img/carousel-1.jpg" alt="AJYAL Odoo ERP">
+                    <img class="w-100" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=80" alt="Ajyal Odoo ERP">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3" style="max-width: 900px;">
-                            
-                            <h5 class="text-white text-uppercase mb-3 animated slideInDown">
-                                Odoo ERP
-                            </h5>
-        
-                            <h1 class="display-1 text-white mb-md-4 animated zoomIn">
-                                نظام واحد لإدارة شركتك بالكامل
-                            </h1>
-        
-                            <p class="text-white mb-4 animated fadeInUp">
-                                في Ajyal، بنقدّم لك حلول ERP متكاملة مبنية على منصة Odoo العالمية،
-                                نظام واحد يجمع كل أقسام شركتك في منصة واحدة تساعدك تدير شغلك بسهولة ودقة وسرعة.
-                            </p>
-        
-                            <a href="quote.html" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">
-                                ابدأ التجربة المجانية
-                            </a>
-        
-                            <a href="contact.html" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">
-                                تواصل معنا
-                            </a>
-        
+                            <h5 class="text-white text-uppercase mb-3">Odoo ERP - الشريك الرسمي في مصر</h5>
+                            <h1 class="display-1 text-white mb-md-4">نظام واحد لإدارة شركتك بالكامل</h1>
+                            <p class="text-white mb-4">في Ajyal، بنقدّم لك حلول ERP متكاملة مبنية على منصة Odoo العالمية، نظام واحد يجمع كل أقسام شركتك في منصة واحدة تساعدك تدير شغلك بسهولة ودقة وسرعة.</p>
+                            <a href="#contact" class="btn btn-primary py-md-3 px-md-5 me-3">ابدأ التجربة المجانية</a>
+                            <a href="#contact" class="btn btn-outline-light py-md-3 px-md-5">تواصل معنا</a>
                         </div>
                     </div>
                 </div>
-        
                 <!-- Slide 2 -->
                 <div class="carousel-item">
-                    <img class="w-100" src="img/carousel-2.jpg" alt="AJYAL ERP Solutions">
+                    <img class="w-100" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&q=80" alt="AJYAL ERP Solutions">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3" style="max-width: 900px;">
-        
-                            <h5 class="text-white text-uppercase mb-3 animated slideInDown">
-                                AJYAL Official Odoo Partner
-                            </h5>
-        
-                            <h1 class="display-1 text-white mb-md-4 animated zoomIn">
-                                حلول ERP مرنة تنمو مع شركتك
-                            </h1>
-        
-                            <p class="text-white mb-4 animated fadeInUp">
-                                من خلال نظام واحد متكامل، تقدر تدير مبيعاتك، مشترياتك، مخزونك،
-                                موظفيك، حساباتك، وعملاءك من مكان واحد،
-                                مع حلول إدارة شاملة قابلة للتخصيص تناسب مختلف أنواع الشركات والقطاعات.
-                            </p>
-        
-                            <a href="quote.html" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">
-                                اطلب عرض سعر
-                            </a>
-        
-                            <a href="contact.html" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">
-                                احجز استشارة مجانية
-                            </a>
-        
+                            <h5 class="text-white text-uppercase mb-3">AJYAL Official Odoo Partner</h5>
+                            <h1 class="display-1 text-white mb-md-4">حلول ERP مرنة تنمو مع شركتك</h1>
+                            <p class="text-white mb-4">من خلال نظام واحد متكامل، تقدر تدير مبيعاتك، مشترياتك، مخزونك، موظفيك، حساباتك، وعملاءك من مكان واحد، مع حلول إدارة شاملة قابلة للتخصيص تناسب مختلف أنواع الشركات والقطاعات.</p>
+                            <a href="#contact" class="btn btn-primary py-md-3 px-md-5 me-3">اطلب عرض سعر</a>
+                            <a href="#contact" class="btn btn-outline-light py-md-3 px-md-5">احجز استشارة مجانية</a>
                         </div>
                     </div>
                 </div>
-        
             </div>
-        
-            <!-- Controls -->
             <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon"></span>
             </button>
-        
             <button class="carousel-control-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon"></span>
             </button>
-        
         </div>
     </div>
-   
-    
-    <!-- Navbar & Carousel End -->
 
-
-    <!-- Full Screen Search Start -->
-    <div class="modal fade" id="searchModal" tabindex="-1">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content" style="background: rgba(9, 30, 62, .7);">
-                <div class="modal-header border-0">
-                    <button type="button" class="btn bg-white btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body d-flex align-items-center justify-content-center">
-                    <div class="input-group" style="max-width: 600px;">
-                        <input type="text" class="form-control bg-transparent border-primary p-3" placeholder="Type search keyword">
-                        <button class="btn btn-primary px-4"><i class="bi bi-search"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Full Screen Search End -->
-
-
-  
-
-    <!-- About Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <!-- About Section -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s" id="about">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-7">
                     <div class="section-title position-relative pb-3 mb-5">
-                        <h5 class="fw-bold text-primary text-uppercase">About Us</h5>
-                        <h1 class="mb-0">The Best IT Solution With 10 Years of Experience</h1>
+                        <h5 class="fw-bold text-primary text-uppercase">من نحن</h5>
+                        <h1 class="mb-0">الشريك الرسمي لـ Odoo في مصر والشرق الأوسط</h1>
                     </div>
-                    <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum et tempor sit. Aliqu diam amet diam et eos labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus clita duo justo et tempor eirmod magna dolore erat amet</p>
+                    <p class="mb-4">Ajyal هي شركة متخصصة في التحول الرقمي وتطبيق أنظمة Odoo ERP للشركات في مصر والشرق الأوسط. بنقدّم حلول إدارة متكاملة تساعد الشركات تربط كل أقسامها في نظام واحد ذكي ومرن. بصفتنا الشريك الرسمي لـ Odoo، بنوفر تنفيذ احترافي يناسب طبيعة كل نشاط.</p>
+                    <p class="mb-4">فريق Ajyal يرافقك في كل خطوة: تحليل، تصميم، تنفيذ، تدريب ودعم مستمر بعد التشغيل. رؤيتنا إن كل شركة تقدر تشتغل أسرع، أدق، وأذكى… بنظام قوي يكبر مع توسّعها.</p>
                     <div class="row g-0 mb-3">
                         <div class="col-sm-6 wow zoomIn" data-wow-delay="0.2s">
-                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Award Winning</h5>
-                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Professional Staff</h5>
+                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>شريك رسمي معتمد لـ Odoo</h5>
+                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>فريق متخصص وخبير</h5>
                         </div>
                         <div class="col-sm-6 wow zoomIn" data-wow-delay="0.4s">
-                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>24/7 Support</h5>
-                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Fair Prices</h5>
+                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>دعم 24/7 بعد التشغيل</h5>
+                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>أسعار تنافسية ومرنة</h5>
                         </div>
                     </div>
                     <div class="d-flex align-items-center mb-4 wow fadeIn" data-wow-delay="0.6s">
@@ -230,29 +347,27 @@
                             <i class="fa fa-phone-alt text-white"></i>
                         </div>
                         <div class="ps-4">
-                            <h5 class="mb-2">Call to ask any question</h5>
-                            <h4 class="text-primary mb-0">+012 345 6789</h4>
+                            <h5 class="mb-2">اتصل بنا لأي استفسار</h5>
+                            <h4 class="text-primary mb-0">+20 100 000 0000</h4>
                         </div>
                     </div>
-                    <a href="quote.html" class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">Request A Quote</a>
+                    <a href="#contact" class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">اطلب عرض سعر مجاني</a>
                 </div>
                 <div class="col-lg-5" style="min-height: 500px;">
                     <div class="position-relative h-100">
-                        <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s" src="img/about.jpg" style="object-fit: cover;">
+                        <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" style="object-fit: cover;" alt="Ajyal Team">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- About End -->
 
-
-    <!-- Features Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <!-- Features -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s" style="background: var(--light);">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
-                <h5 class="fw-bold text-primary text-uppercase">Why Choose Us</h5>
-                <h1 class="mb-0">We Are Here to Grow Your Business Exponentially</h1>
+                <h5 class="fw-bold text-primary text-uppercase">لماذا Ajyal؟</h5>
+                <h1 class="mb-0">نساعدك تدير شركتك أسرع وأذكى</h1>
             </div>
             <div class="row g-5">
                 <div class="col-lg-4">
@@ -261,21 +376,21 @@
                             <div class="bg-primary rounded d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
                                 <i class="fa fa-cubes text-white"></i>
                             </div>
-                            <h4>Best In Industry</h4>
-                            <p class="mb-0">Magna sea eos sit dolor, ipsum amet lorem diam dolor eos et diam dolor</p>
+                            <h4>شريك رسمي معتمد</h4>
+                            <p class="mb-0">بصفتنا الشريك الرسمي لـ Odoo في مصر، نوفر لك نظام مرن قابل للتخصيص يناسب طبيعة نشاطك.</p>
                         </div>
                         <div class="col-12 wow zoomIn" data-wow-delay="0.6s">
                             <div class="bg-primary rounded d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
                                 <i class="fa fa-award text-white"></i>
                             </div>
-                            <h4>Award Winning</h4>
-                            <p class="mb-0">Magna sea eos sit dolor, ipsum amet lorem diam dolor eos et diam dolor</p>
+                            <h4>تنفيذ احترافي</h4>
+                            <p class="mb-0">فريق خبير يرافقك من التحليل والتصميم للتنفيذ والتدريب والدعم المستمر.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4  wow zoomIn" data-wow-delay="0.9s" style="min-height: 350px;">
+                <div class="col-lg-4 wow zoomIn" data-wow-delay="0.9s" style="min-height: 350px;">
                     <div class="position-relative h-100">
-                        <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.1s" src="img/feature.jpg" style="object-fit: cover;">
+                        <img class="position-absolute w-100 h-100 rounded" src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&q=80" style="object-fit: cover;" alt="ERP Dashboard">
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -284,403 +399,529 @@
                             <div class="bg-primary rounded d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
                                 <i class="fa fa-users-cog text-white"></i>
                             </div>
-                            <h4>Professional Staff</h4>
-                            <p class="mb-0">Magna sea eos sit dolor, ipsum amet lorem diam dolor eos et diam dolor</p>
+                            <h4>تكامل كامل بين الأقسام</h4>
+                            <p class="mb-0">نظام واحد يربط المبيعات، المشتريات، المخزون، HR، والمحاسبة في منصة موحدة.</p>
                         </div>
                         <div class="col-12 wow zoomIn" data-wow-delay="0.8s">
                             <div class="bg-primary rounded d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
                                 <i class="fa fa-phone-alt text-white"></i>
                             </div>
-                            <h4>24/7 Support</h4>
-                            <p class="mb-0">Magna sea eos sit dolor, ipsum amet lorem diam dolor eos et diam dolor</p>
+                            <h4>دعم 24/7 بعد التشغيل</h4>
+                            <p class="mb-0">فريق دعم فني متاح دايمًا لضمان استمرارية عملك بدون أي توقف.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Features Start -->
 
-
-    <!-- Service Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <!-- Services / Modules Overview -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s" id="services">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
-                <h5 class="fw-bold text-primary text-uppercase">Our Services</h5>
-                <h1 class="mb-0">Custom IT Solutions for Your Successful Business</h1>
+                <h5 class="fw-bold text-primary text-uppercase">خدماتنا</h5>
+                <h1 class="mb-0">إدارة مرنة تتناسب مع نمو شركتك</h1>
             </div>
             <div class="row g-5">
                 <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.3s">
                     <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="service-icon">
-                            <i class="fa fa-shield-alt text-white"></i>
+                            <i class="fa fa-chart-line text-white"></i>
                         </div>
-                        <h4 class="mb-3">Cyber Security</h4>
-                        <p class="m-0">Amet justo dolor lorem kasd amet magna sea stet eos vero lorem ipsum dolore sed</p>
-                        <a class="btn btn-lg btn-primary rounded" href="">
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
+                        <h4 class="mb-3">إدارة المبيعات</h4>
+                        <p class="m-0">نظام شامل يدير دورة البيع بالكامل من أول عميل محتمل لحد إغلاق الصفقة والفواتير.</p>
+                        <a class="btn btn-lg btn-primary rounded" href="#modules"><i class="bi bi-arrow-left"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.6s">
                     <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="service-icon">
-                            <i class="fa fa-chart-pie text-white"></i>
+                            <i class="fa fa-shopping-cart text-white"></i>
                         </div>
-                        <h4 class="mb-3">Data Analytics</h4>
-                        <p class="m-0">Amet justo dolor lorem kasd amet magna sea stet eos vero lorem ipsum dolore sed</p>
-                        <a class="btn btn-lg btn-primary rounded" href="">
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
+                        <h4 class="mb-3">إدارة المشتريات</h4>
+                        <p class="m-0">تحكم كامل في عمليات الشراء مع موردينك، من طلب عرض سعر حتى استلام البضاعة.</p>
+                        <a class="btn btn-lg btn-primary rounded" href="#modules"><i class="bi bi-arrow-left"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.9s">
                     <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="service-icon">
-                            <i class="fa fa-code text-white"></i>
+                            <i class="fa fa-boxes text-white"></i>
                         </div>
-                        <h4 class="mb-3">Web Development</h4>
-                        <p class="m-0">Amet justo dolor lorem kasd amet magna sea stet eos vero lorem ipsum dolore sed</p>
-                        <a class="btn btn-lg btn-primary rounded" href="">
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
+                        <h4 class="mb-3">إدارة المخزون</h4>
+                        <p class="m-0">إدارة دقيقة للمخازن، حركة الأصناف، وحدات القياس والكميات المتاحة مع تنبيهات فورية.</p>
+                        <a class="btn btn-lg btn-primary rounded" href="#modules"><i class="bi bi-arrow-left"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.3s">
                     <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="service-icon">
-                            <i class="fab fa-android text-white"></i>
+                            <i class="fa fa-users text-white"></i>
                         </div>
-                        <h4 class="mb-3">Apps Development</h4>
-                        <p class="m-0">Amet justo dolor lorem kasd amet magna sea stet eos vero lorem ipsum dolore sed</p>
-                        <a class="btn btn-lg btn-primary rounded" href="">
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
+                        <h4 class="mb-3">CRM</h4>
+                        <p class="m-0">Pipeline واضح لإدارة العملاء والفرص البيعية خطوة بخطوة مع تقارير أداء احترافية.</p>
+                        <a class="btn btn-lg btn-primary rounded" href="#modules"><i class="bi bi-arrow-left"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.6s">
                     <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="service-icon">
-                            <i class="fa fa-search text-white"></i>
+                            <i class="fa fa-user-tie text-white"></i>
                         </div>
-                        <h4 class="mb-3">SEO Optimization</h4>
-                        <p class="m-0">Amet justo dolor lorem kasd amet magna sea stet eos vero lorem ipsum dolore sed</p>
-                        <a class="btn btn-lg btn-primary rounded" href="">
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
+                        <h4 class="mb-3">الموارد البشرية</h4>
+                        <p class="m-0">إدارة بيانات الموظفين، الرواتب، الحضور والانصراف، والإجازات بسهولة تامة.</p>
+                        <a class="btn btn-lg btn-primary rounded" href="#modules"><i class="bi bi-arrow-left"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.9s">
-                    <div class="position-relative bg-primary rounded h-100 d-flex flex-column align-items-center justify-content-center text-center p-5">
-                        <h3 class="text-white mb-3">Call Us For Quote</h3>
-                        <p class="text-white mb-3">Clita ipsum magna kasd rebum at ipsum amet dolor justo dolor est magna stet eirmod</p>
-                        <h2 class="text-white mb-0">+012 345 6789</h2>
+                    <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
+                        <div class="service-icon">
+                            <i class="fa fa-calculator text-white"></i>
+                        </div>
+                        <h4 class="mb-3">المحاسبة العامة</h4>
+                        <p class="m-0">نظام مالي كامل متوافق مع الفاتورة الإلكترونية والضرائب في مصر مع تقارير لحظية.</p>
+                        <a class="btn btn-lg btn-primary rounded" href="#modules"><i class="bi bi-arrow-left"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Service End -->
 
-
-    <!-- Pricing Plan Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <!-- Industry Selection -->
+    <div class="container-fluid py-5 wow fadeInUp" style="background: var(--light);">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
-                <h5 class="fw-bold text-primary text-uppercase">Pricing Plans</h5>
-                <h1 class="mb-0">We are Offering Competitive Prices for Our Clients</h1>
+                <h5 class="fw-bold text-primary text-uppercase">قطاعات الأعمال</h5>
+                <h1 class="mb-0">اختر مجال عملك</h1>
             </div>
-            <div class="row g-0">
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.6s">
-                    <div class="bg-light rounded">
-                        <div class="border-bottom py-4 px-5 mb-4">
-                            <h4 class="text-primary mb-1">Basic Plan</h4>
-                            <small class="text-uppercase">For Small Size Business</small>
-                        </div>
-                        <div class="p-5 pt-0">
-                            <h1 class="display-5 mb-3">
-                                <small class="align-top" style="font-size: 22px; line-height: 45px;">$</small>49.00<small
-                                    class="align-bottom" style="font-size: 16px; line-height: 40px;">/ Month</small>
-                            </h1>
-                            <div class="d-flex justify-content-between mb-3"><span>HTML5 & CSS3</span><i class="fa fa-check text-primary pt-1"></i></div>
-                            <div class="d-flex justify-content-between mb-3"><span>Bootstrap v5</span><i class="fa fa-check text-primary pt-1"></i></div>
-                            <div class="d-flex justify-content-between mb-3"><span>Responsive Layout</span><i class="fa fa-times text-danger pt-1"></i></div>
-                            <div class="d-flex justify-content-between mb-2"><span>Cross-browser Support</span><i class="fa fa-times text-danger pt-1"></i></div>
-                            <a href="" class="btn btn-primary py-2 px-4 mt-4">Order Now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
-                    <div class="bg-white rounded shadow position-relative" style="z-index: 1;">
-                        <div class="border-bottom py-4 px-5 mb-4">
-                            <h4 class="text-primary mb-1">Standard Plan</h4>
-                            <small class="text-uppercase">For Medium Size Business</small>
-                        </div>
-                        <div class="p-5 pt-0">
-                            <h1 class="display-5 mb-3">
-                                <small class="align-top" style="font-size: 22px; line-height: 45px;">$</small>99.00<small
-                                    class="align-bottom" style="font-size: 16px; line-height: 40px;">/ Month</small>
-                            </h1>
-                            <div class="d-flex justify-content-between mb-3"><span>HTML5 & CSS3</span><i class="fa fa-check text-primary pt-1"></i></div>
-                            <div class="d-flex justify-content-between mb-3"><span>Bootstrap v5</span><i class="fa fa-check text-primary pt-1"></i></div>
-                            <div class="d-flex justify-content-between mb-3"><span>Responsive Layout</span><i class="fa fa-check text-primary pt-1"></i></div>
-                            <div class="d-flex justify-content-between mb-2"><span>Cross-browser Support</span><i class="fa fa-times text-danger pt-1"></i></div>
-                            <a href="" class="btn btn-primary py-2 px-4 mt-4">Order Now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.9s">
-                    <div class="bg-light rounded">
-                        <div class="border-bottom py-4 px-5 mb-4">
-                            <h4 class="text-primary mb-1">Advanced Plan</h4>
-                            <small class="text-uppercase">For Large Size Business</small>
-                        </div>
-                        <div class="p-5 pt-0">
-                            <h1 class="display-5 mb-3">
-                                <small class="align-top" style="font-size: 22px; line-height: 45px;">$</small>149.00<small
-                                    class="align-bottom" style="font-size: 16px; line-height: 40px;">/ Month</small>
-                            </h1>
-                            <div class="d-flex justify-content-between mb-3"><span>HTML5 & CSS3</span><i class="fa fa-check text-primary pt-1"></i></div>
-                            <div class="d-flex justify-content-between mb-3"><span>Bootstrap v5</span><i class="fa fa-check text-primary pt-1"></i></div>
-                            <div class="d-flex justify-content-between mb-3"><span>Responsive Layout</span><i class="fa fa-check text-primary pt-1"></i></div>
-                            <div class="d-flex justify-content-between mb-2"><span>Cross-browser Support</span><i class="fa fa-check text-primary pt-1"></i></div>
-                            <a href="" class="btn btn-primary py-2 px-4 mt-4">Order Now</a>
-                        </div>
+            <div class="text-center mb-5">
+                <button class="industry-btn" onclick="showIndustry('مقاولات')">🏗️ المقاولات</button>
+                <button class="industry-btn" onclick="showIndustry('مصانع')">🏭 المصانع</button>
+                <button class="industry-btn" onclick="showIndustry('تجزئة')">🏪 المحلات التجارية</button>
+                <button class="industry-btn" onclick="showIndustry('سيارات')">🚗 السيارات</button>
+                <button class="industry-btn" onclick="showIndustry('نقل')">🚛 النقل والخدمات</button>
+                <button class="industry-btn" onclick="showIndustry('مكاتب')">💼 مكاتب الأعمال</button>
+                <button class="industry-btn" onclick="showIndustry('طبي')">🏥 الخدمات الطبية</button>
+            </div>
+            <div id="industry-content" class="row g-4">
+                <div class="col-12">
+                    <div class="bg-white rounded shadow p-4 text-center">
+                        <h3 class="text-primary" id="industry-title"></h3>
+                        <p id="industry-desc" class="lead"></p>
+                        <a href="#contact" class="btn btn-primary py-2 px-5 mt-2">ابدأ التجربة الآن</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Pricing Plan End -->
 
+    <!-- Detailed Modules -->
+    <div class="container-fluid py-5 wow fadeInUp" id="modules">
+        <div class="container py-5">
+            <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
+                <h5 class="fw-bold text-primary text-uppercase">موديولات Odoo</h5>
+                <h1 class="mb-0">نظام متكامل لكل أقسام شركتك</h1>
+            </div>
 
-    <!-- Quote Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+            <!-- Module Tabs -->
+            <div class="text-center mb-5">
+                <button class="module-tab-btn active" onclick="showModule('sales')">المبيعات</button>
+                <button class="module-tab-btn" onclick="showModule('purchase')">المشتريات</button>
+                <button class="module-tab-btn" onclick="showModule('inventory')">المخزون</button>
+                <button class="module-tab-btn" onclick="showModule('crm')">CRM</button>
+                <button class="module-tab-btn" onclick="showModule('hr')">الموارد البشرية</button>
+                <button class="module-tab-btn" onclick="showModule('accounting')">المحاسبة</button>
+                <button class="module-tab-btn" onclick="showModule('operations')">العمليات</button>
+            </div>
+
+            <!-- Sales Module -->
+            <div class="module-detail active" id="module-sales">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="text-primary mb-4">برنامج إدارة المبيعات والفواتير</h2>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>الفواتير وعروض الأسعار</h6><p>أصدر فواتيرك الإلكترونية والضريبية وعروض الأسعار بطريقة احترافية وسريعة. تابع المدفوعات وحالة كل فاتورة في نفس اللحظة.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>نقاط البيع (POS)</h6><p>شاشة بيع سريعة وسهلة للاستخدام تدعم اللمس، مناسبة للمتاجر والمطاعم. إدارة لحظية للمبيعات النقدية وبطاقات الدفع والمرتجعات.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة الأقساط</h6><p>نظام مرن لإدارة خطط التقسيط وتنظيم الدفعات لكل عميل مع تتبع المتأخرات تلقائيًا.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>المبيعات المستهدفة والعمولات</h6><p>إدارة كاملة لنظام عمولات فريق المبيعات حسب الهدف، النسبة، أو الأداء الفعلي.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>العروض والخصومات</h6><p>إنشاء وإدارة عروض ترويجية، خصومات، وقوائم أسعار مختلفة حسب العملاء أو المواسم.</p></div></div>
+                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=700&q=80" class="img-fluid rounded shadow" alt="Sales Module">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purchase Module -->
+            <div class="module-detail" id="module-purchase">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="text-primary mb-4">إدارة المشتريات</h2>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>أوامر الشراء</h6><p>إنشئ وتتبع أوامر الشراء من لحظة الطلب وحتى استلام البضاعة. تحكم كامل في دورة التوريد مع ربط تلقائي بالمخزون والحسابات.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة الموردين</h6><p>ملفات كاملة لكل مورد تشمل الأسعار، التوريدات، العقود، والمستندات. قارن عروض الأسعار بسهولة.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>استلام البضائع وإرجاعها</h6><p>تسجيل لحظي لاستلام الطلبيات ومطابقتها مع أمر الشراء وإدارة المرتجعات بدقة.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>المشتريات التعاقدية</h6><p>إدارة العقود طويلة المدى مع الموردين والتوريدات الدورية بشكل تلقائي.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تحليل المشتريات</h6><p>تقارير ذكية تقيس أداء الموردين وتكاليف الشراء والمنتجات الأعلى طلبًا.</p></div></div>
+                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=700&q=80" class="img-fluid rounded shadow" alt="Purchase Module">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Module -->
+            <div class="module-detail" id="module-inventory">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="text-primary mb-4">إدارة المخزون</h2>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة متعددة المخازن والفروع</h6><p>تحكم كامل في عدد لا نهائي من المخازن والفروع مع عرض لحظي للكميات.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>حركة الأصناف وتتبع المنتجات</h6><p>سجّل كل حركة: استلام، صرف، مرتجع، تحويل، جرد مع تتبع بالأرقام التسلسلية.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تنبيهات الكميات</h6><p>تنبيه فوري عند انخفاض مخزون أي صنف مع إنشاء أوامر شراء تلقائية.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>جرد المخزون</h6><p>إدارة عمليات الجرد الدورية أو المفاجئة بسهولة مع ربط بالمخزون الفعلي.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تقارير وتحليل ذكي</h6><p>تحليل كامل لحركة الأصناف ومعدل البيع لتطوير قرارات الشراء والتخطيط.</p></div></div>
+                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=700&q=80" class="img-fluid rounded shadow" alt="Inventory Module">
+                    </div>
+                </div>
+            </div>
+
+            <!-- CRM Module -->
+            <div class="module-detail" id="module-crm">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="text-primary mb-4">إدارة علاقات العملاء (CRM)</h2>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة العملاء والفرص البيعية</h6><p>Pipeline واضح يتابع مسار كل عميل محتمل لحظة بلحظة. كل فرصة ومكالمة وزيارة مسجلة تلقائيًا.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>التواصل والتذكيرات الذكية</h6><p>جدولة مكالمات واجتماعات مع تذكيرات تلقائية وربط بالإيميل والواتساب.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تقارير السيلز والأداء</h6><p>تقارير احترافية تقيس أداء فريق المبيعات ونسبة الإغلاق في Dashboard حديث.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>عروض الأسعار ومتابعة العملاء</h6><p>إصدار عروض أسعار احترافية وتتبع لحظي لحالة كل عرض مع ربط كامل بالمبيعات.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة العملاء الحاليين</h6><p>سجل كامل لكل عميل مع خطط ولاء وحملات مستهدفة لزيادة معدل الاحتفاظ.</p></div></div>
+                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=700&q=80" class="img-fluid rounded shadow" alt="CRM Module">
+                    </div>
+                </div>
+            </div>
+
+            <!-- HR Module -->
+            <div class="module-detail" id="module-hr">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="text-primary mb-4">إدارة الموارد البشرية</h2>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>ملفات الموظفين</h6><p>ملف شامل لكل موظف يحتوي على البيانات الشخصية، العقود، المستندات، والإجازات.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>الحضور والانصراف</h6><p>تتبع حضور الموظفين بالسجلات اليدوية، البصمة، أو الجي بي إس مع ربط مباشر بالرواتب.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>الرواتب والمكافآت</h6><p>إدارة الرواتب تلقائيًا مع دعم كامل للضرائب والتأمينات واللوائح المحلية.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة الإجازات والسلف</h6><p>أنظمة مرنة لإدارة طلبات الإجازة، الموافقات، والسلف مع لوحة تحكم واضحة.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تقارير الـ HR وتحليل الأداء</h6><p>تقارير شاملة عن أداء الموظفين والغياب والإنتاجية لاتخاذ قرار إداري دقيق.</p></div></div>
+                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=700&q=80" class="img-fluid rounded shadow" alt="HR Module">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accounting Module -->
+            <div class="module-detail" id="module-accounting">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="text-primary mb-4">المحاسبة العامة</h2>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة الحسابات الرئيسية</h6><p>تسجيل شامل لكل القيود المحاسبية متوافق مع المعايير العالمية مع إمكانية تخصيص الدليل المحاسبي.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>الفواتير والدفعات</h6><p>إصدار فواتير ضريبية وإلكترونية وتتبع الدفعات والمتأخرات بدقة.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة البنوك والصناديق</h6><p>تسجيل العمليات البنكية والمصالحة التلقائية وإدارة Cash Flow في لوحة واحدة.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة المصروفات والتكاليف</h6><p>رؤية واضحة لتوزيع المصروفات على كل قسم أو مشروع لتقليل الهدر وزيادة الربحية.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>التقارير المالية</h6><p>ميزانية عامة، قائمة دخل، ميزان مراجعة، وتقارير ضريبية مع تكامل الفاتورة الإلكترونية في مصر.</p></div></div>
+                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=700&q=80" class="img-fluid rounded shadow" alt="Accounting Module">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operations Module -->
+            <div class="module-detail" id="module-operations">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="text-primary mb-4">إدارة العمليات والتشغيل</h2>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة دورة التشغيل اليومية</h6><p>تحكم في كل مهمة، طلب خدمة، أو إجراء تشغيل من مكان واحد مع تتبع لحظي للإنجاز.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة المهام والفرق</h6><p>توزيع المهام مع عرض بصري واضح لسير العمل (Kanban / Timeline) وإشعارات تلقائية.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تتبع العمليات وربط الأقسام</h6><p>ربط كامل بين التشغيل، المخزون، المبيعات، والمالية لضمان انسيابية بدون أخطاء.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>شكاوى العملاء وتذاكر الدعم</h6><p>نظام متكامل لإدارة شكاوى العملاء وتتبع كل تذكرة مع لوحة تحكم موحدة.</p></div></div>
+                        <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تقارير التشغيل وتحليل الأداء</h6><p>بيانات دقيقة تساعدك تطور شغلك مع عرض لحظي للأداء في Dashboard واحدة.</p></div></div>
+                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="https://images.unsplash.com/photo-1531973576160-7125cd663d86?w=700&q=80" class="img-fluid rounded shadow" alt="Operations Module">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Counter -->
+    <div class="container-fluid py-5 wow fadeInUp" style="background: var(--dark);">
+        <div class="container py-5">
+            <div class="row g-5 text-center">
+                <div class="col-lg-3 col-md-6">
+                    <div class="counter-item">
+                        <div class="counter-icon mx-auto"><i class="fa fa-users text-white fa-2x"></i></div>
+                        <div class="counter-number" id="c1">0</div>
+                        <h5 class="text-white">عميل راضٍ</h5>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="counter-item">
+                        <div class="counter-icon mx-auto"><i class="fa fa-project-diagram text-white fa-2x"></i></div>
+                        <div class="counter-number" id="c2">0</div>
+                        <h5 class="text-white">مشروع منجز</h5>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="counter-item">
+                        <div class="counter-icon mx-auto"><i class="fa fa-star text-white fa-2x"></i></div>
+                        <div class="counter-number" id="c3">0</div>
+                        <h5 class="text-white">سنوات خبرة</h5>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="counter-item">
+                        <div class="counter-icon mx-auto"><i class="fa fa-building text-white fa-2x"></i></div>
+                        <div class="counter-number" id="c4">0</div>
+                        <h5 class="text-white">قطاع أعمال</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact / Quote Form -->
+    <div class="container-fluid py-5 wow fadeInUp" id="contact">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-7">
                     <div class="section-title position-relative pb-3 mb-5">
-                        <h5 class="fw-bold text-primary text-uppercase">Request A Quote</h5>
-                        <h1 class="mb-0">Need A Free Quote? Please Feel Free to Contact Us</h1>
+                        <h5 class="fw-bold text-primary text-uppercase">تواصل معنا</h5>
+                        <h1 class="mb-0">ابدأ التجربة المجانية الآن</h1>
                     </div>
                     <div class="row gx-3">
                         <div class="col-sm-6 wow zoomIn" data-wow-delay="0.2s">
-                            <h5 class="mb-4"><i class="fa fa-reply text-primary me-3"></i>Reply within 24 hours</h5>
+                            <h5 class="mb-4"><i class="fa fa-reply text-primary me-3"></i>رد خلال 24 ساعة</h5>
                         </div>
                         <div class="col-sm-6 wow zoomIn" data-wow-delay="0.4s">
-                            <h5 class="mb-4"><i class="fa fa-phone-alt text-primary me-3"></i>24 hrs telephone support</h5>
+                            <h5 class="mb-4"><i class="fa fa-phone-alt text-primary me-3"></i>دعم هاتفي على مدار الساعة</h5>
                         </div>
                     </div>
-                    <p class="mb-4">Eirmod sed tempor lorem ut dolores. Aliquyam sit sadipscing kasd ipsum. Dolor ea et dolore et at sea ea at dolor, justo ipsum duo rebum sea invidunt voluptua. Eos vero eos vero ea et dolore eirmod et. Dolores diam duo invidunt lorem. Elitr ut dolores magna sit. Sea dolore sanctus sed et. Takimata takimata sanctus sed.</p>
+                    <p class="mb-4">Ajyal هي شركة متخصصة في التحول الرقمي وتطبيق أنظمة Odoo ERP للشركات في مصر والشرق الأوسط. نساعدك تدير المبيعات، المشتريات، المخزون، الموارد البشرية، المحاسبة وكل العمليات من مكان واحد. رؤيتنا إن كل شركة تقدر تشتغل أسرع، أدق، وأذكى.</p>
                     <div class="d-flex align-items-center mt-2 wow zoomIn" data-wow-delay="0.6s">
                         <div class="bg-primary d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
                             <i class="fa fa-phone-alt text-white"></i>
                         </div>
                         <div class="ps-4">
-                            <h5 class="mb-2">Call to ask any question</h5>
-                            <h4 class="text-primary mb-0">+012 345 6789</h4>
+                            <h5 class="mb-2">اتصل لأي استفسار</h5>
+                            <h4 class="text-primary mb-0">+20 100 000 0000</h4>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-5">
                     <div class="bg-primary rounded h-100 d-flex align-items-center p-5 wow zoomIn" data-wow-delay="0.9s">
-                        <form onsubmit="handleSubmit(event, 'sssss')">
-                            <div class="row g-3">
-                                <div class="col-xl-12">
-                                    <input type="text" class="form-control bg-light border-0" placeholder="Your Name" style="height: 55px;">
-                                </div>
-                                <div class="col-12">
-                                    <input type="email" class="form-control bg-light border-0" placeholder="Your Email" style="height: 55px;">
-                                </div>
-                                <div class="col-12">
-                                    <select class="form-select bg-light border-0" style="height: 55px;">
-                                        <option selected>Select A Service</option>
-                                        <option value="1">Service 1</option>
-                                        <option value="2">Service 2</option>
-                                        <option value="3">Service 3</option>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <textarea class="form-control bg-light border-0" rows="3" placeholder="Message"></textarea>
-                                </div>
-                                <div class="col-12">
-                                    <button class="btn btn-dark w-100 py-3" type="submit">Request A Quote</button>
+                        <div class="w-100">
+                            <div id="form-success" style="display:none;" class="text-center text-white py-4">
+                                <i class="fa fa-check-circle fa-4x mb-3"></i>
+                                <h3>شكرًا لتواصلك معنا!</h3>
+                                <p>سيتواصل معك فريقنا خلال 24 ساعة.</p>
+                            </div>
+                            <div id="contact-form">
+                                <div class="row g-3">
+                                    <div class="col-xl-12">
+                                        <input type="text" id="name" class="form-control bg-light border-0" placeholder="اسمك الكامل" style="height: 55px;">
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="email" id="email" class="form-control bg-light border-0" placeholder="البريد الإلكتروني" style="height: 55px;">
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="tel" id="phone" class="form-control bg-light border-0" placeholder="رقم الهاتف / واتساب" style="height: 55px;">
+                                    </div>
+                                    <div class="col-12">
+                                        <select id="service" class="form-select bg-light border-0" style="height: 55px;">
+                                            <option selected>اختر المجال</option>
+                                            <option>المقاولات</option>
+                                            <option>المصانع</option>
+                                            <option>المحلات التجارية</option>
+                                            <option>السيارات</option>
+                                            <option>النقل والخدمات</option>
+                                            <option>مكاتب الأعمال</option>
+                                            <option>الخدمات الطبية</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <textarea id="message" class="form-control bg-light border-0" rows="3" placeholder="رسالتك أو استفسارك"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-dark w-100 py-3" onclick="submitForm()">ابدأ التجربة المجانية</button>
+                                    </div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Quote End -->
-
-
-  
-
-  
-
-
-    <!-- Blog Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="container py-5">
-            <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
-                <h5 class="fw-bold text-primary text-uppercase">Latest Blog</h5>
-                <h1 class="mb-0">Read The Latest Articles from Our Blog Post</h1>
-            </div>
-            <div class="row g-5">
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
-                    <div class="blog-item bg-light rounded overflow-hidden">
-                        <div class="blog-img position-relative overflow-hidden">
-                            <img class="img-fluid" src="img/blog-1.jpg" alt="">
-                            <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4" href="">Web Design</a>
-                        </div>
-                        <div class="p-4">
-                            <div class="d-flex mb-3">
-                                <small class="me-3"><i class="far fa-user text-primary me-2"></i>John Doe</small>
-                                <small><i class="far fa-calendar-alt text-primary me-2"></i>01 Jan, 2045</small>
-                            </div>
-                            <h4 class="mb-3">How to build a website</h4>
-                            <p>Dolor et eos labore stet justo sed est sed sed sed dolor stet amet</p>
-                            <a class="text-uppercase" href="">Read More <i class="bi bi-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.6s">
-                    <div class="blog-item bg-light rounded overflow-hidden">
-                        <div class="blog-img position-relative overflow-hidden">
-                            <img class="img-fluid" src="img/blog-2.jpg" alt="">
-                            <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4" href="">Web Design</a>
-                        </div>
-                        <div class="p-4">
-                            <div class="d-flex mb-3">
-                                <small class="me-3"><i class="far fa-user text-primary me-2"></i>John Doe</small>
-                                <small><i class="far fa-calendar-alt text-primary me-2"></i>01 Jan, 2045</small>
-                            </div>
-                            <h4 class="mb-3">How to build a website</h4>
-                            <p>Dolor et eos labore stet justo sed est sed sed sed dolor stet amet</p>
-                            <a class="text-uppercase" href="">Read More <i class="bi bi-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.9s">
-                    <div class="blog-item bg-light rounded overflow-hidden">
-                        <div class="blog-img position-relative overflow-hidden">
-                            <img class="img-fluid" src="img/blog-3.jpg" alt="">
-                            <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4" href="">Web Design</a>
-                        </div>
-                        <div class="p-4">
-                            <div class="d-flex mb-3">
-                                <small class="me-3"><i class="far fa-user text-primary me-2"></i>John Doe</small>
-                                <small><i class="far fa-calendar-alt text-primary me-2"></i>01 Jan, 2045</small>
-                            </div>
-                            <h4 class="mb-3">How to build a website</h4>
-                            <p>Dolor et eos labore stet justo sed est sed sed sed dolor stet amet</p>
-                            <a class="text-uppercase" href="">Read More <i class="bi bi-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Blog Start -->
 
-
-    
-
-    <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-light mt-5 wow fadeInUp" data-wow-delay="0.1s">
+    <!-- Footer -->
+    <div class="container-fluid bg-dark text-light mt-5 wow fadeInUp footer" data-wow-delay="0.1s">
         <div class="container">
             <div class="row gx-5">
                 <div class="col-lg-4 col-md-6 footer-about">
                     <div class="d-flex flex-column align-items-center justify-content-center text-center h-100 bg-primary p-4">
                         <a href="index.html" class="navbar-brand">
-                            <h1 class="m-0 text-white"><i class="fa fa-user-tie me-2"></i>Startup</h1>
+                            <h1 class="m-0 text-white" style="font-size:32px;">Ajyal</h1>
                         </a>
-                        <p class="mt-3 mb-4">Lorem diam sit erat dolor elitr et, diam lorem justo amet clita stet eos sit. Elitr dolor duo lorem, elitr clita ipsum sea. Diam amet erat lorem stet eos. Diam amet et kasd eos duo.</p>
-                        <form action="">
-                            <div class="input-group">
-                                <input type="text" class="form-control border-white p-3" placeholder="Your Email">
-                                <button class="btn btn-dark">Sign Up</button>
-                            </div>
-                        </form>
+                        <p class="mt-3 mb-4">الشريك الرسمي لـ Odoo في مصر والشرق الأوسط. نقدّم حلول ERP متكاملة تساعد الشركات تربط كل أقسامها في نظام واحد ذكي ومرن.</p>
+                        <div class="input-group">
+                            <input type="text" class="form-control border-white p-3" placeholder="بريدك الإلكتروني">
+                            <button class="btn btn-dark">اشترك</button>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-6">
                     <div class="row gx-5">
                         <div class="col-lg-4 col-md-12 pt-5 mb-5">
                             <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="text-light mb-0">Get In Touch</h3>
+                                <h3 class="text-light mb-0">تواصل معنا</h3>
                             </div>
                             <div class="d-flex mb-2">
                                 <i class="bi bi-geo-alt text-primary me-2"></i>
-                                <p class="mb-0">123 Street, New York, USA</p>
+                                <p class="mb-0">القاهرة، مصر</p>
                             </div>
                             <div class="d-flex mb-2">
                                 <i class="bi bi-envelope-open text-primary me-2"></i>
-                                <p class="mb-0">info@example.com</p>
+                                <p class="mb-0">info@ajyal-erp.com</p>
                             </div>
                             <div class="d-flex mb-2">
                                 <i class="bi bi-telephone text-primary me-2"></i>
-                                <p class="mb-0">+012 345 67890</p>
+                                <p class="mb-0">+20 100 000 0000</p>
                             </div>
                             <div class="d-flex mt-4">
-                                <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-twitter fw-normal"></i></a>
                                 <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
                                 <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-linkedin-in fw-normal"></i></a>
+                                <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-whatsapp fw-normal"></i></a>
                                 <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram fw-normal"></i></a>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-12 pt-0 pt-lg-5 mb-5">
                             <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="text-light mb-0">Quick Links</h3>
+                                <h3 class="text-light mb-0">روابط سريعة</h3>
                             </div>
                             <div class="link-animated d-flex flex-column justify-content-start">
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
-                                <a class="text-light" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
+                                <a class="text-light mb-2" href="#home"><i class="bi bi-arrow-left text-primary me-2"></i>الرئيسية</a>
+                                <a class="text-light mb-2" href="#about"><i class="bi bi-arrow-left text-primary me-2"></i>من نحن</a>
+                                <a class="text-light mb-2" href="#services"><i class="bi bi-arrow-left text-primary me-2"></i>خدماتنا</a>
+                                <a class="text-light mb-2" href="#modules"><i class="bi bi-arrow-left text-primary me-2"></i>الموديولات</a>
+                                <a class="text-light" href="#contact"><i class="bi bi-arrow-left text-primary me-2"></i>تواصل معنا</a>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-12 pt-0 pt-lg-5 mb-5">
                             <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="text-light mb-0">Popular Links</h3>
+                                <h3 class="text-light mb-0">الموديولات</h3>
                             </div>
                             <div class="link-animated d-flex flex-column justify-content-start">
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
-                                <a class="text-light" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
+                                <a class="text-light mb-2" href="#modules"><i class="bi bi-arrow-left text-primary me-2"></i>إدارة المبيعات</a>
+                                <a class="text-light mb-2" href="#modules"><i class="bi bi-arrow-left text-primary me-2"></i>إدارة المشتريات</a>
+                                <a class="text-light mb-2" href="#modules"><i class="bi bi-arrow-left text-primary me-2"></i>إدارة المخزون</a>
+                                <a class="text-light mb-2" href="#modules"><i class="bi bi-arrow-left text-primary me-2"></i>CRM</a>
+                                <a class="text-light mb-2" href="#modules"><i class="bi bi-arrow-left text-primary me-2"></i>الموارد البشرية</a>
+                                <a class="text-light" href="#modules"><i class="bi bi-arrow-left text-primary me-2"></i>المحاسبة العامة</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="copyright text-center py-3">
+            <p class="mb-0 text-light">© 2024 Ajyal ERP. جميع الحقوق محفوظة.</p>
+        </div>
     </div>
-   
-    <!-- Footer End -->
-
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded back-to-top" style="display:flex;"><i class="bi bi-arrow-up"></i></a>
 
-
-    <!-- JavaScript Libraries -->
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/counterup/counterup.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script>
+        // Hide spinner
+        window.addEventListener('load', function() {
+            document.getElementById('spinner').classList.remove('show');
+            document.querySelector('.back-to-top').style.display = 'none';
+            startCounters();
+        });
+
+        // Back to top
+        window.addEventListener('scroll', function() {
+            const btn = document.querySelector('.back-to-top');
+            btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+        });
+
+        // Industry content
+        const industryData = {
+            'مقاولات': 'حلول ERP مخصصة لشركات المقاولات: إدارة المشاريع، التكاليف، المقاولين، والمستخلصات بدقة عالية.',
+            'مصانع': 'نظام تصنيع متكامل: إدارة أوامر الإنتاج، المواد الخام، التكاليف الصناعية، وتخطيط الطاقة الإنتاجية.',
+            'تجزئة': 'حلول نقاط البيع (POS) والمخزون للمتاجر: إدارة الفروع، العروض، والمبيعات بشكل احترافي.',
+            'سيارات': 'نظام شامل لمعارض وورش السيارات: إدارة المخزون، قطع الغيار، خدمات الصيانة، والعملاء.',
+            'نقل': 'إدارة أساطيل النقل والخدمات اللوجستية: تتبع الرحلات، التكاليف، السائقين، والفواتير.',
+            'مكاتب': 'حلول متكاملة لشركات الخدمات والمكاتب: CRM، إدارة المشاريع، الفواتير، والموارد البشرية.',
+            'طبي': 'نظام إدارة العيادات والمستشفيات: ملفات المرضى، الحجوزات، الصيدليات، والفواتير الطبية.'
+        };
+
+        function showIndustry(industry) {
+            document.getElementById('industry-title').textContent = 'حلول Odoo لقطاع ' + industry;
+            document.getElementById('industry-desc').textContent = industryData[industry];
+            const content = document.getElementById('industry-content');
+            content.classList.add('show');
+            content.style.display = 'block';
+            document.querySelectorAll('.industry-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Module tabs
+        function showModule(module) {
+            document.querySelectorAll('.module-detail').forEach(d => d.classList.remove('active'));
+            document.getElementById('module-' + module).classList.add('active');
+            document.querySelectorAll('.module-tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Counter animation
+        function animateCounter(el, target, suffix) {
+            let count = 0;
+            const step = Math.ceil(target / 60);
+            const timer = setInterval(() => {
+                count += step;
+                if (count >= target) { count = target; clearInterval(timer); }
+                el.textContent = count + (suffix || '+');
+            }, 30);
+        }
+
+        function startCounters() {
+            animateCounter(document.getElementById('c1'), 200);
+            animateCounter(document.getElementById('c2'), 350);
+            animateCounter(document.getElementById('c3'), 10);
+            animateCounter(document.getElementById('c4'), 15);
+        }
+
+        // Form submit
+        function submitForm() {
+            const name = document.getElementById('name').value;
+            if (!name) { alert('من فضلك أدخل اسمك'); return; }
+            document.getElementById('contact-form').style.display = 'none';
+            document.getElementById('form-success').style.display = 'block';
+        }
+    </script>
 </body>
-
 </html>
