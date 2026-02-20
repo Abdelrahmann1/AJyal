@@ -18,7 +18,7 @@
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Favicons and App Icons -->
@@ -36,8 +36,8 @@
         }
 
         * { font-family: 'Cairo', 'Nunito', sans-serif; }
-
-        body { overflow-x: hidden; }
+        a{ text-decoration: none !important;cursor: pointer;  }
+        body { overflow-x: hidden !important; }
 
         /*** Spinner ***/
         #spinner {
@@ -75,7 +75,7 @@
 
         /*** Navbar ***/
         .navbar .dropdown-toggle::after { border: none; content: "\f107"; font-family: "Font Awesome 5 Free"; font-weight: 900; vertical-align: middle; margin-left: 8px; }
-        .navbar-light .navbar-nav .nav-link { margin-right: 30px; padding: 25px 0; color: #FFFFFF; font-size: 15px; font-weight: 600; outline: none; }
+        .navbar-light .navbar-nav .nav-link { margin-right: 30px; padding: 25px 0; color: var(--dark); font-size: 15px; font-weight: 600; outline: none; }
         .navbar-light .navbar-nav .nav-link:hover, .navbar-light .navbar-nav .nav-link.active { color: var(--primary); }
         @media (max-width: 991.98px) {
             .navbar-light .navbar-nav .nav-link { margin-left: 0; padding: 10px 0; }
@@ -236,6 +236,397 @@
 
         .carousel-item img { height: 600px; object-fit: cover; }
         @media (max-width: 768px) { .carousel-item img { height: 400px; } }
+        
+
+        .trigger-btn {
+            background: var(--primary);
+            color: #fff; border: none;
+            padding: 16px 40px; border-radius: 50px;
+            font-size: 18px; font-weight: 700;
+            cursor: pointer; transition: .3s;
+            box-shadow: 0 8px 30px rgba(6,163,218,.4);
+        }
+        .trigger-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(6,163,218,.6); }
+
+
+     .popup-overlay {
+            position: fixed; inset: 0;
+            background: rgba(9,30,62,0.75);
+            backdrop-filter: blur(6px);
+            z-index: 9998;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+            opacity: 0; 
+            visibility: hidden;
+            transition: opacity .35s ease, visibility .35s ease;
+        }
+        .popup-overlay.open { opacity: 1; visibility: visible; }
+
+        /* ── Modal Card ── */
+        .popup-card {
+            background: #fff;
+            border-radius: 20px;
+            width: 100%; max-width: 560px;
+            overflow: hidden;
+            transform: translateY(40px) scale(0.95);
+            transition: transform .35s cubic-bezier(0.175,0.885,0.32,1.275);
+            position: relative;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+        }
+        .popup-overlay.open .popup-card { transform: translateY(0) scale(1); }
+
+        /* ── Header ── */
+        .popup-header {
+            background: linear-gradient(135deg, var(--dark) 0%, #0d3572 100%);
+            padding: 30px 35px 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        .popup-header::before {
+            content: '';
+            position: absolute; top: -40px; left: -40px;
+            width: 160px; height: 160px; border-radius: 50%;
+            background: rgba(6,163,218,.15);
+        }
+        .popup-header::after {
+            content: '';
+            position: absolute; bottom: -30px; right: -20px;
+            width: 120px; height: 120px; border-radius: 50%;
+            background: rgba(6,163,218,.1);
+        }
+        .popup-header .brand {
+            font-size: 26px; font-weight: 800; color: #fff;
+            position: relative; z-index: 1;
+        }
+        .popup-header .brand span { color: var(--primary); }
+        .popup-header h3 {
+            color: #fff; font-size: 20px; font-weight: 700;
+            margin: 8px 0 4px; position: relative; z-index: 1;
+        }
+        .popup-header p {
+            color: rgba(255,255,255,.7); font-size: 14px;
+            margin: 0; position: relative; z-index: 1;
+        }
+        .popup-close {
+            position: absolute; top: 18px; left: 18px;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(255,255,255,.15); border: none;
+            color: #fff; font-size: 16px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: .2s; z-index: 2;
+        }
+        .popup-close:hover { background: rgba(255,255,255,.3); transform: rotate(90deg); }
+
+        /* ── Progress Bar ── */
+        .progress-wrap { padding: 0 35px; background: var(--dark); }
+        .progress-steps {
+            display: flex; align-items: center;
+            padding: 14px 0; gap: 0;
+        }
+        .step-dot {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: rgba(255,255,255,.15);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 700; color: rgba(255,255,255,.5);
+            transition: .3s; flex-shrink: 0;
+        }
+        .step-dot.active { background: var(--primary); color: #fff; box-shadow: 0 0 0 4px rgba(6,163,218,.3); }
+        .step-dot.done { background: #22c55e; color: #fff; }
+        .step-line {
+            flex: 1; height: 3px;
+            background: rgba(255,255,255,.15); border-radius: 2px;
+            position: relative; overflow: hidden;
+        }
+        .step-line .fill {
+            position: absolute; top: 0; left: 0; height: 100%;
+            background: var(--primary); width: 0%;
+            transition: width .4s ease;
+        }
+        .step-label {
+            font-size: 11px; color: rgba(255,255,255,.5);
+            text-align: center; margin-top: 6px;
+        }
+        .step-label.active { color: var(--primary); font-weight: 700; }
+
+        /* ── Body ── */
+        .popup-body { padding: 30px 35px; }
+
+        .form-step { display: none; animation: stepIn .3s ease; }
+        .form-step.active { display: block; }
+        @keyframes stepIn {
+            from { opacity: 0; transform: translateX(-15px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ── Inputs ── */
+        .field-group { margin-bottom: 18px; }
+        .field-group label {
+            display: block; font-weight: 700; font-size: 14px;
+            color: var(--dark); margin-bottom: 7px;
+        }
+        .field-group label span { color: #ef4444; margin-right: 3px; }
+        .form-control, .form-select {
+            border: 2px solid #e5e7eb; border-radius: 10px;
+            height: 50px; font-family: 'Cairo', sans-serif;
+            font-size: 14px; transition: .25s;
+            padding: 0 16px;
+        }
+        textarea.form-control { height: auto; padding: 12px 16px; }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(6,163,218,.12);
+        }
+        .form-control.error { border-color: #ef4444; }
+        .error-msg { color: #ef4444; font-size: 12px; margin-top: 5px; display: none; }
+        .error-msg.show { display: block; }
+
+        /* Input with icon */
+        .input-icon { position: relative; }
+        .input-icon i {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            right: 15px; color: #9ca3af; font-size: 15px;
+        }
+        .input-icon .form-control { padding-right: 42px; }
+
+        /* ── Checkboxes ── */
+        .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .service-check {
+            border: 2px solid #e5e7eb; border-radius: 10px;
+            padding: 10px 14px; cursor: pointer; transition: .25s;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .service-check input { display: none; }
+        .service-check .check-box {
+            width: 20px; height: 20px; border-radius: 5px;
+            border: 2px solid #d1d5db; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            transition: .2s;
+        }
+        .service-check input:checked ~ .check-box {
+            background: var(--primary); border-color: var(--primary);
+        }
+        .service-check input:checked ~ .check-box::after {
+            content: '✓'; color: #fff; font-size: 12px; font-weight: 700;
+        }
+        .service-check:has(input:checked) { border-color: var(--primary); background: var(--light); }
+        .service-check span { font-size: 13px; font-weight: 600; color: var(--dark); }
+
+        /* ── Buttons ── */
+        .popup-footer {
+            display: flex; gap: 10px; justify-content: space-between;
+            padding: 0 35px 30px;
+        }
+        .btn-prev {
+            background: #f3f4f6; color: var(--dark);
+            border: none; border-radius: 10px;
+            padding: 12px 25px; font-weight: 700; font-size: 15px;
+            cursor: pointer; transition: .2s; font-family: 'Cairo', sans-serif;
+        }
+        .btn-prev:hover { background: #e5e7eb; }
+        .btn-next {
+            background: var(--primary); color: #fff;
+            border: none; border-radius: 10px;
+            padding: 12px 30px; font-weight: 700; font-size: 15px;
+            cursor: pointer; transition: .2s; flex: 1;
+            font-family: 'Cairo', sans-serif;
+            box-shadow: 0 4px 15px rgba(6,163,218,.3);
+        }
+        .btn-next:hover { background: #0481ae; transform: translateY(-1px); }
+        .btn-next:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+       
+        /* ── Success State ── */
+        .success-state { display: none; text-align: center; padding: 40px 35px; }
+        .success-state.show { display: block; animation: stepIn .4s ease; }
+        .success-circle {
+            width: 100px; height: 100px; border-radius: 50%;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+            animation: popIn .5s cubic-bezier(0.175,0.885,0.32,1.275);
+        }
+        @keyframes popIn {
+            from { transform: scale(0); } to { transform: scale(1); }
+        }
+        .success-circle i { font-size: 45px; color: #fff; }
+        .success-state h3 { color: var(--dark); font-size: 22px; font-weight: 800; }
+        .success-state p { color: #6b7280; font-size: 15px; }
+        .summary-box {
+            background: var(--light); border-radius: 12px;
+            padding: 16px 20px; text-align: right; margin-top: 20px;
+        }
+        .summary-row {
+            display: flex; justify-content: space-between;
+            font-size: 14px; padding: 5px 0;
+            border-bottom: 1px solid #dbeafe;
+        }
+        .summary-row:last-child { border-bottom: none; }
+        .summary-row .label { color: #6b7280; }
+        .summary-row .val { font-weight: 700; color: var(--dark); }
+
+        /* ── Floating WhatsApp ── */
+        .whatsapp-float {
+            position: fixed; bottom: 30px; left: 30px;
+            width: 58px; height: 58px; border-radius: 50%;
+            background: #25D366; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px; box-shadow: 0 4px 20px rgba(37,211,102,.5);
+            cursor: pointer; transition: .3s; z-index: 9999;
+            text-decoration: none;
+        }
+         .btn-top{
+                background: var(--primary) !important;
+    border-color: var(--primary) !important; color: #fff;
+        }        .btn-top:hover { transform: scale(1.1); color: #fff; }
+
+        .whatsapp-float:hover { transform: scale(1.1); color: #fff; }
+ .phone-float {
+            position: fixed; bottom: 100px; left: 30px;
+            width: 58px; height: 58px; border-radius: 50%;
+            background: #091E3E; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px; box-shadow: 0 4px 20px rgba(9,30,62,.5);
+            cursor: pointer; transition: .3s; z-index: 9999;
+            text-decoration: none;
+        }
+        .phone-float:hover { transform: scale(1.1); color: #fff; }
+        /* ── Floating trigger ── */
+    
+        @keyframes bounce {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .floating-trigger:hover { animation: none; transform: scale(1.05); }
+        .pulse-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: #fff; position: relative;
+        }
+        .pulse-dot::after {
+            content: ''; position: absolute; inset: -4px;
+            border-radius: 50%; border: 2px solid #fff;
+            animation: pulse-ring 1.5s ease infinite;
+        }
+        .btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(255,255,255,0.4) 50%,
+        transparent 100%
+    );
+    transform: skewX(-25deg);
+    transition: left 0.7s ease;
+}
+
+.btn-primary:hover::after {
+    left: 120%;
+}
+
+.btn-primary:hover {
+    transform: scale(1.03);
+    transition: transform 0.3s ease;
+}
+.navbar-dark .navbar-nav .nav-link {
+    font-family: 'Nunito', sans-serif;
+    position: relative;
+    margin-left: 25px;
+    padding: 35px 0;
+    color: var(--dark) ; 
+    font-size: 18px;
+    font-weight: 600;
+    outline: none;
+    transition: .5s;
+}
+
+.sticky-top.navbar-dark .navbar-nav .nav-link {
+    padding: 20px 0;
+    color: var(--light);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active {
+    color: var(--primary);
+}
+
+.navbar-dark .navbar-brand h1 {
+    color: var(--dark);
+}
+
+.navbar-dark .navbar-toggler {
+    color: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
+@media (max-width: 991.98px) {
+    .sticky-top.navbar-dark {
+        position: relative;
+        background: #FFFFFF;
+    }
+
+    .navbar-dark .navbar-nav .nav-link,
+    .navbar-dark .navbar-nav .nav-link.show,
+    .sticky-top.navbar-dark .navbar-nav .nav-link {
+        padding: 10px 0;
+        color: var(--dark);
+    }
+
+    .navbar-dark .navbar-brand h1 {
+        color: var(--primary);
+    }
+}
+
+@media (min-width: 992px) {
+    .navbar-dark {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+        border-bottom: 1px solid rgba(256, 256, 256, .1);
+        z-index: 999;
+        background: #FFFFFF;
+        opacity: 0.7;
+    }
+    
+    .sticky-top.navbar-dark {
+        position: fixed;
+        background: #FFFFFF;
+    }
+
+    .navbar-dark .navbar-nav .nav-link::before {
+        position: absolute;
+        content: "";
+        width: 0;
+        height: 2px;
+        bottom: -1px;
+        left: 50%;
+        background: var(--primary);
+        transition: .5s;
+    }
+
+    .navbar-dark .navbar-nav .nav-link:hover::before,
+    .navbar-dark .navbar-nav .nav-link.active::before {
+        width: 100%;
+        left: 0;
+    }
+
+    .navbar-dark .navbar-nav .nav-link.nav-contact::before {
+        display: none;
+    }
+
+    .sticky-top.navbar-dark .navbar-brand h1 {
+        color: var(--primary);
+    }
+}
+
     </style>
 </head>
 
@@ -276,14 +667,14 @@
                 <span class="fa fa-bars"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav ms-auto py-0">
+                <div class="navbar-nav ms-auto py-0 gap-2 mx-5">
                     <a href="#home" class="nav-item nav-link active">الرئيسية</a>
                     <a href="#about" class="nav-item nav-link">من نحن</a>
                     <a href="#services" class="nav-item nav-link">الخدمات</a>
                     <a href="#modules" class="nav-item nav-link">الموديولات</a>
-                    <a href="#contact" class="nav-item nav-link">تواصل معنا</a>
+                    <a onclick="openPopup()"  class="nav-item nav-link">تواصل معنا</a>
                 </div>
-                <a href="#contact" class="btn btn-primary py-2 px-4 ms-3">ابدأ التجربة المجانية</a>
+                <a onclick="openPopup()" class="btn btn-primary py-2 px-4 ms-3">ابدأ التجربة المجانية</a>
             </div>
         </nav>
 
@@ -298,8 +689,8 @@
                             <h5 class="text-white text-uppercase mb-3">Odoo ERP - الشريك الرسمي في مصر</h5>
                             <h1 class="display-1 text-white mb-md-4">نظام واحد لإدارة شركتك بالكامل</h1>
                             <p class="text-white mb-4">في Ajyal، بنقدّم لك حلول ERP متكاملة مبنية على منصة Odoo العالمية، نظام واحد يجمع كل أقسام شركتك في منصة واحدة تساعدك تدير شغلك بسهولة ودقة وسرعة.</p>
-                            <a href="#contact" class="btn btn-primary py-md-3 px-md-5 me-3">ابدأ التجربة المجانية</a>
-                            <a href="#contact" class="btn btn-outline-light py-md-3 px-md-5">تواصل معنا</a>
+                            <a onclick="openPopup()"  class="btn btn-primary py-md-3 px-md-5 me-3">ابدأ التجربة المجانية</a>
+                            <a onclick="openPopup()"  class="btn btn-outline-light py-md-3 px-md-5">تواصل معنا</a>
                         </div>
                     </div>
                 </div>
@@ -311,8 +702,8 @@
                             <h5 class="text-white text-uppercase mb-3">AJYAL Official Odoo Partner</h5>
                             <h1 class="display-1 text-white mb-md-4">حلول ERP مرنة تنمو مع شركتك</h1>
                             <p class="text-white mb-4">من خلال نظام واحد متكامل، تقدر تدير مبيعاتك، مشترياتك، مخزونك، موظفيك، حساباتك، وعملاءك من مكان واحد، مع حلول إدارة شاملة قابلة للتخصيص تناسب مختلف أنواع الشركات والقطاعات.</p>
-                            <a href="#contact" class="btn btn-primary py-md-3 px-md-5 me-3">اطلب عرض سعر</a>
-                            <a href="#contact" class="btn btn-outline-light py-md-3 px-md-5">احجز استشارة مجانية</a>
+                            <a onclick="openPopup()"  class="btn btn-primary py-md-3 px-md-5 me-3">اطلب عرض سعر</a>
+                            <a onclick="openPopup()"  class="btn btn-outline-light py-md-3 px-md-5">احجز استشارة مجانية</a>
                         </div>
                     </div>
                 </div>
@@ -327,10 +718,10 @@
     </div>
 
     <!-- About Section -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s" id="about">
+    <div class="container-fluid py-5 wow " data-wow-delay="0.1s" id="about">
         <div class="container py-5">
             <div class="row g-5">
-                <div class="col-lg-7">
+                <div class="col-lg-7"  data-aos="fade-up" data-aos-duration="1000">
                     <div class="section-title position-relative pb-3 mb-5">
                         <h5 class="fw-bold text-primary text-uppercase">من نحن</h5>
                         <h1 class="mb-0">الشريك الرسمي لـ Odoo في مصر والشرق الأوسط</h1>
@@ -348,9 +739,9 @@
                         </div>
                     </div>
                     
-                    <a href="#contact" class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">اطلب عرض سعر مجاني</a>
+                    <a onclick="openPopup()"  class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">اطلب عرض سعر مجاني</a>
                 </div>
-                <div class="col-lg-5" style="min-height: 500px;">
+                <div class="col-lg-5" style="min-height: 500px;"  data-aos="fade-down" data-aos-duration="1000">
                     <div class="position-relative h-100">
                         <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" style="object-fit: cover;" alt="Ajyal Team">
                     </div>
@@ -360,7 +751,7 @@
     </div>
 
     <!-- Features -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s" style="background: var(--light);">
+    <div class="container-fluid py-5 wow "  data-aos="fade-up" data-aos-duration="1000" data-wow-delay="0.1s" style="background: var(--light);">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
                 <h5 class="fw-bold text-primary text-uppercase">لماذا Ajyal؟</h5>
@@ -413,7 +804,7 @@
     </div>
 
     <!-- Services / Modules Overview -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s" id="services">
+    <div class="container-fluid py-5 wow "  data-aos="fade-down" data-aos-duration="1000" data-wow-delay="0.1s" id="services">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
                 <h5 class="fw-bold text-primary text-uppercase">خدماتنا</h5>
@@ -485,7 +876,7 @@
     </div>
 
     <!-- Industry Selection -->
-    <div class="container-fluid py-5 wow fadeInUp" style="background: var(--light);">
+    <div class="container-fluid py-5 wow " data-aos="fade-up" data-aos-duration="1000" style="background: var(--light);">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
                 <h5 class="fw-bold text-primary text-uppercase">قطاعات الأعمال</h5>
@@ -505,7 +896,7 @@
                     <div class="bg-white rounded shadow p-4 text-center">
                         <h3 class="text-primary" id="industry-title"></h3>
                         <p id="industry-desc" class="lead"></p>
-                        <a href="#contact" class="btn btn-primary py-2 px-5 mt-2">ابدأ التجربة الآن</a>
+                        <a onclick="openPopup()"  class="btn btn-primary py-2 px-5 mt-2">ابدأ التجربة الآن</a>
                     </div>
                 </div>
             </div>
@@ -513,7 +904,7 @@
     </div>
 
     <!-- Detailed Modules -->
-    <div class="container-fluid py-5 wow fadeInUp" id="modules">
+    <div class="container-fluid py-5 wow "  data-aos="fade-down" data-aos-duration="1000" id="modules">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
                 <h5 class="fw-bold text-primary text-uppercase">موديولات Odoo</h5>
@@ -541,7 +932,7 @@
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة الأقساط</h6><p>نظام مرن لإدارة خطط التقسيط وتنظيم الدفعات لكل عميل مع تتبع المتأخرات تلقائيًا.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>المبيعات المستهدفة والعمولات</h6><p>إدارة كاملة لنظام عمولات فريق المبيعات حسب الهدف، النسبة، أو الأداء الفعلي.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>العروض والخصومات</h6><p>إنشاء وإدارة عروض ترويجية، خصومات، وقوائم أسعار مختلفة حسب العملاء أو المواسم.</p></div></div>
-                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                        <a onclick="openPopup()"  class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
                     </div>
                     <div class="col-lg-6">
                         <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=700&q=80" class="img-fluid rounded shadow" alt="Sales Module">
@@ -559,7 +950,7 @@
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>استلام البضائع وإرجاعها</h6><p>تسجيل لحظي لاستلام الطلبيات ومطابقتها مع أمر الشراء وإدارة المرتجعات بدقة.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>المشتريات التعاقدية</h6><p>إدارة العقود طويلة المدى مع الموردين والتوريدات الدورية بشكل تلقائي.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تحليل المشتريات</h6><p>تقارير ذكية تقيس أداء الموردين وتكاليف الشراء والمنتجات الأعلى طلبًا.</p></div></div>
-                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                        <a onclick="openPopup()"  class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
                     </div>
                     <div class="col-lg-6">
                         <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=700&q=80" class="img-fluid rounded shadow" alt="Purchase Module">
@@ -577,7 +968,7 @@
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تنبيهات الكميات</h6><p>تنبيه فوري عند انخفاض مخزون أي صنف مع إنشاء أوامر شراء تلقائية.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>جرد المخزون</h6><p>إدارة عمليات الجرد الدورية أو المفاجئة بسهولة مع ربط بالمخزون الفعلي.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تقارير وتحليل ذكي</h6><p>تحليل كامل لحركة الأصناف ومعدل البيع لتطوير قرارات الشراء والتخطيط.</p></div></div>
-                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                        <a onclick="openPopup()"  class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
                     </div>
                     <div class="col-lg-6">
                         <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=700&q=80" class="img-fluid rounded shadow" alt="Inventory Module">
@@ -595,7 +986,7 @@
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تقارير السيلز والأداء</h6><p>تقارير احترافية تقيس أداء فريق المبيعات ونسبة الإغلاق في Dashboard حديث.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>عروض الأسعار ومتابعة العملاء</h6><p>إصدار عروض أسعار احترافية وتتبع لحظي لحالة كل عرض مع ربط كامل بالمبيعات.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة العملاء الحاليين</h6><p>سجل كامل لكل عميل مع خطط ولاء وحملات مستهدفة لزيادة معدل الاحتفاظ.</p></div></div>
-                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                        <a onclick="openPopup()"  class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
                     </div>
                     <div class="col-lg-6">
                         <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=700&q=80" class="img-fluid rounded shadow" alt="CRM Module">
@@ -613,7 +1004,7 @@
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>الرواتب والمكافآت</h6><p>إدارة الرواتب تلقائيًا مع دعم كامل للضرائب والتأمينات واللوائح المحلية.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة الإجازات والسلف</h6><p>أنظمة مرنة لإدارة طلبات الإجازة، الموافقات، والسلف مع لوحة تحكم واضحة.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تقارير الـ HR وتحليل الأداء</h6><p>تقارير شاملة عن أداء الموظفين والغياب والإنتاجية لاتخاذ قرار إداري دقيق.</p></div></div>
-                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                        <a onclick="openPopup()"  class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
                     </div>
                     <div class="col-lg-6">
                         <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=700&q=80" class="img-fluid rounded shadow" alt="HR Module">
@@ -631,7 +1022,7 @@
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة البنوك والصناديق</h6><p>تسجيل العمليات البنكية والمصالحة التلقائية وإدارة Cash Flow في لوحة واحدة.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>إدارة المصروفات والتكاليف</h6><p>رؤية واضحة لتوزيع المصروفات على كل قسم أو مشروع لتقليل الهدر وزيادة الربحية.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>التقارير المالية</h6><p>ميزانية عامة، قائمة دخل، ميزان مراجعة، وتقارير ضريبية مع تكامل الفاتورة الإلكترونية في مصر.</p></div></div>
-                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                        <a onclick="openPopup()"  class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
                     </div>
                     <div class="col-lg-6">
                         <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=700&q=80" class="img-fluid rounded shadow" alt="Accounting Module">
@@ -649,7 +1040,7 @@
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تتبع العمليات وربط الأقسام</h6><p>ربط كامل بين التشغيل، المخزون، المبيعات، والمالية لضمان انسيابية بدون أخطاء.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>شكاوى العملاء وتذاكر الدعم</h6><p>نظام متكامل لإدارة شكاوى العملاء وتتبع كل تذكرة مع لوحة تحكم موحدة.</p></div></div>
                         <div class="feature-item"><i class="fa fa-check-circle fa-lg"></i><div><h6>تقارير التشغيل وتحليل الأداء</h6><p>بيانات دقيقة تساعدك تطور شغلك مع عرض لحظي للأداء في Dashboard واحدة.</p></div></div>
-                        <a href="#contact" class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
+                        <a onclick="openPopup()"  class="btn btn-primary py-3 px-5 mt-3">ابدأ التجربة الآن</a>
                     </div>
                     <div class="col-lg-6">
                         <img src="https://images.unsplash.com/photo-1531973576160-7125cd663d86?w=700&q=80" class="img-fluid rounded shadow" alt="Operations Module">
@@ -660,34 +1051,34 @@
     </div>
 
     <!-- Stats Counter -->
-    <div class="container-fluid py-5 wow fadeInUp" style="background: var(--dark);">
+    <div class="container-fluid py-5 wow " data-aos="fade-up" data-aos-duration="1000" style="background: var(--dark);">
         <div class="container py-5">
             <div class="row g-5 text-center">
                 <div class="col-lg-3 col-md-6">
                     <div class="counter-item">
                         <div class="counter-icon mx-auto"><i class="fa fa-users text-white fa-2x"></i></div>
-                        <div class="counter-number" id="c1">0</div>
+                        <div class="counter-number" id="c1"data-target="200">0</div>
                         <h5 class="text-white">عميل راضٍ</h5>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="counter-item">
                         <div class="counter-icon mx-auto"><i class="fa fa-project-diagram text-white fa-2x"></i></div>
-                        <div class="counter-number" id="c2">0</div>
+                        <div class="counter-number" id="c2"data-target="350">0</div>
                         <h5 class="text-white">مشروع منجز</h5>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="counter-item">
                         <div class="counter-icon mx-auto"><i class="fa fa-star text-white fa-2x"></i></div>
-                        <div class="counter-number" id="c3">0</div>
+                        <div class="counter-number" id="c3"data-target="10">0</div>
                         <h5 class="text-white">سنوات خبرة</h5>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="counter-item">
                         <div class="counter-icon mx-auto"><i class="fa fa-building text-white fa-2x"></i></div>
-                        <div class="counter-number" id="c4">0</div>
+                        <div class="counter-number" id="c4"data-target="50">0</div>
                         <h5 class="text-white">قطاع أعمال</h5>
                     </div>
                 </div>
@@ -696,7 +1087,7 @@
     </div>
 
     <!-- Contact / Quote Form -->
-    <div class="container-fluid py-5 wow fadeInUp" id="contact">
+    <div class="container-fluid py-5 wow " data-aos="fade-down" data-aos-duration="1000" id="contact">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-7">
@@ -723,7 +1114,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-5"> 
                     <div class="bg-primary rounded h-100 d-flex align-items-center p-5 wow zoomIn" data-wow-delay="0.9s">
                         <div class="w-100">
                             <div id="form-success" style="display:none;" class="text-center text-white py-4">
@@ -764,13 +1155,13 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> 
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <div class="container-fluid bg-dark text-light mt-5 wow fadeInUp footer" data-wow-delay="0.1s">
+    <div class="container-fluid bg-dark text-light mt-5 wow  footer"  data-wow-delay="0.1s">
         <div class="container">
             <div class="row gx-5">
                 <div class="col-lg-4 col-md-6 footer-about">
@@ -803,7 +1194,7 @@
                                 <i class="bi bi-telephone text-primary me-2"></i>
                                 <p class="mb-0">  01004089065  </p>
                             </div>
-                            <div class="d-flex mt-4">
+                            <div class="d-flex mt-4 justify-content-around">
                                 <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
                                 <a class="btn btn-primary btn-square me-2" href="#https://www.linkedin.com/company/ajyal-technology-odoo-partner/about/"><i class="fab fa-linkedin-in fw-normal"></i></a>
                                 <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-whatsapp fw-normal"></i></a>
@@ -819,7 +1210,7 @@
                                 <a class="text-light mb-2" href="#about"><i class="bi bi-arrow-left text-primary me-2"></i>من نحن</a>
                                 <a class="text-light mb-2" href="#services"><i class="bi bi-arrow-left text-primary me-2"></i>خدماتنا</a>
                                 <a class="text-light mb-2" href="#modules"><i class="bi bi-arrow-left text-primary me-2"></i>الموديولات</a>
-                                <a class="text-light" href="#contact"><i class="bi bi-arrow-left text-primary me-2"></i>تواصل معنا</a>
+                                <a class="text-light" onclick="openPopup()" ><i class="bi bi-arrow-left text-primary me-2"></i>تواصل معنا</a>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-12 pt-0 pt-lg-5 mb-5">
@@ -843,20 +1234,356 @@
             <p class="mb-0 text-light">© 2026 Ajyal ERP. جميع الحقوق محفوظة.</p>
         </div>
     </div>
+<a class="phone-float" href="tel:+201000000000" target="_blank">
+<i class="bi bi-telephone-outbound-fill"></i>    </a>
+        <a class="whatsapp-float" href="https://wa.me/201000000000" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+     <div class="popup-overlay" id="popupOverlay" onclick="handleOverlayClick(event)">
+        <div class="popup-card" id="popupCard">
 
+            <!-- Header -->
+            <div class="popup-header">
+                <button class="popup-close" onclick="closePopup()"><i class="fa fa-times"></i></button>
+                <div class="brand"><span>Ajyal</span> ERP</div>
+                <h3>ابدأ رحلتك مع Odoo الآن 🚀</h3>
+                <p>أدخل بياناتك وسيتواصل معك خبير خلال 24 ساعة</p>
+            </div>
+
+            <!-- Progress -->
+            <div class="progress-wrap">
+                <div class="progress-steps">
+                    <div class="step-dot active" id="dot1">1</div>
+                    <div class="step-line"><div class="fill" id="line1"></div></div>
+                    <div class="step-dot" id="dot2">2</div>
+                    <div class="step-line"><div class="fill" id="line2"></div></div>
+                    <div class="step-dot" id="dot3">3</div>
+                </div>
+                <div class="d-flex justify-content-between" style="margin-top:-6px; padding-bottom:10px;">
+                    <div class="step-label active" id="lbl1">بياناتك</div>
+                    <div class="step-label" id="lbl2">شركتك</div>
+                    <div class="step-label" id="lbl3">الاهتمامات</div>
+                </div>
+            </div>
+
+            <!-- ── STEP 1: Personal Info ── -->
+            <div class="popup-body" id="bodyWrap">
+                <div class="form-step active" id="step1">
+                    <div class="field-group">
+                        <label>الاسم الكامل <span>*</span></label>
+                        <div class="input-icon">
+                            <i class="fa fa-user"></i>
+                            <input type="text" class="form-control" id="f-name" placeholder="مثال: محمد أحمد">
+                        </div>
+                        <div class="error-msg" id="e-name">من فضلك أدخل اسمك الكامل</div>
+                    </div>
+                    <div class="field-group">
+                        <label>رقم الهاتف / واتساب <span>*</span></label>
+                        <div class="input-icon">
+                            <i class="fa fa-phone-alt"></i>
+                            <input type="tel" class="form-control" id="f-phone" placeholder="01x xxxx xxxx">
+                        </div>
+                        <div class="error-msg" id="e-phone">من فضلك أدخل رقم هاتف صحيح</div>
+                    </div>
+                    <div class="field-group">
+                        <label>البريد الإلكتروني</label>
+                        <div class="input-icon">
+                            <i class="fa fa-envelope"></i>
+                            <input type="email" class="form-control" id="f-email" placeholder="example@company.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── STEP 2: Company Info ── -->
+                <div class="form-step" id="step2">
+                    <div class="field-group">
+                        <label>اسم الشركة <span>*</span></label>
+                        <div class="input-icon">
+                            <i class="fa fa-building"></i>
+                            <input type="text" class="form-control" id="f-company" placeholder="اسم شركتك أو نشاطك">
+                        </div>
+                        <div class="error-msg" id="e-company">من فضلك أدخل اسم الشركة</div>
+                    </div>
+                    <div class="field-group">
+                        <label>مجال العمل <span>*</span></label>
+                        <select class="form-select" id="f-industry">
+                            <option value="">اختر مجال عملك</option>
+                            <option>المقاولات</option>
+                            <option>المصانع والتصنيع</option>
+                            <option>المحلات التجارية</option>
+                            <option>السيارات</option>
+                            <option>النقل والخدمات اللوجستية</option>
+                            <option>مكاتب وخدمات الأعمال</option>
+                            <option>الخدمات الطبية</option>
+                            <option>أخرى</option>
+                        </select>
+                        <div class="error-msg" id="e-industry">من فضلك اختر مجال العمل</div>
+                    </div>
+                    <div class="field-group">
+                        <label>حجم الشركة</label>
+                        <select class="form-select" id="f-size">
+                            <option value="">اختر عدد الموظفين</option>
+                            <option>1 – 10 موظفين</option>
+                            <option>11 – 50 موظف</option>
+                            <option>51 – 200 موظف</option>
+                            <option>أكثر من 200 موظف</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ── STEP 3: Services ── -->
+                <div class="form-step" id="step3">
+                    <div class="field-group">
+                        <label>الأنظمة التي تحتاجها <span>*</span></label>
+                        <div class="services-grid" id="servicesGrid">
+                            <label class="service-check">
+                                <input type="checkbox" value="المبيعات">
+                                <div class="check-box"></div>
+                                <span>📈 إدارة المبيعات</span>
+                            </label>
+                            <label class="service-check">
+                                <input type="checkbox" value="المشتريات">
+                                <div class="check-box"></div>
+                                <span>🛒 إدارة المشتريات</span>
+                            </label>
+                            <label class="service-check">
+                                <input type="checkbox" value="المخزون">
+                                <div class="check-box"></div>
+                                <span>📦 إدارة المخزون</span>
+                            </label>
+                            <label class="service-check">
+                                <input type="checkbox" value="CRM">
+                                <div class="check-box"></div>
+                                <span>🤝 CRM</span>
+                            </label>
+                            <label class="service-check">
+                                <input type="checkbox" value="الموارد البشرية">
+                                <div class="check-box"></div>
+                                <span>👥 الموارد البشرية</span>
+                            </label>
+                            <label class="service-check">
+                                <input type="checkbox" value="المحاسبة">
+                                <div class="check-box"></div>
+                                <span>💼 المحاسبة</span>
+                            </label>
+                            <label class="service-check">
+                                <input type="checkbox" value="العمليات">
+                                <div class="check-box"></div>
+                                <span>⚙️ إدارة العمليات</span>
+                            </label>
+                            <label class="service-check">
+                                <input type="checkbox" value="نقاط البيع">
+                                <div class="check-box"></div>
+                                <span>🏪 نقاط البيع</span>
+                            </label>
+                        </div>
+                        <div class="error-msg" id="e-services">من فضلك اختر نظام واحد على الأقل</div>
+                    </div>
+                    <div class="field-group">
+                        <label>أي تفاصيل إضافية؟</label>
+                        <textarea class="form-control" id="f-notes" rows="3" placeholder="أخبرنا أكثر عن احتياجاتك أو أي ملاحظات..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success -->
+            <div class="success-state" id="successState">
+                <div class="success-circle"><i class="fa fa-check"></i></div>
+                <h3>تم إرسال طلبك بنجاح! 🎉</h3>
+                <p>شكرًا لك. سيتواصل معك فريق Ajyal خلال 24 ساعة.</p>
+                <div class="summary-box" id="summaryBox"></div>
+                <a href="thank-you.html" class="btn btn-primary mt-4 py-2 px-5 rounded-pill" style="font-weight:700;">
+                    عرض صفحة التأكيد <i class="fa fa-arrow-left me-2"></i>
+                </a>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="popup-footer" id="popupFooter">
+                <button class="btn-prev" id="btnPrev" onclick="prevStep()" style="display:none;">
+                    <i class="fa fa-arrow-right me-1"></i> السابق
+                </button>
+                <button class="btn-next" id="btnNext" onclick="nextStep()">
+                    التالي <i class="fa fa-arrow-left me-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded back-to-top" style="display:flex;"><i class="bi bi-arrow-up"></i></a>
+    <a href="#" class="btn btn-lg btn-top btn-lg-square rounded back-to-top" style="display:flex;"><i class="bi bi-arrow-up"></i></a>
 
-    <!-- Scripts -->
+<!-- jQuery (عندك موجود بالفعل، بس تأكد إنه قبل كل حاجة) -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init();
+</script>
+    <script>
+        // دالة العد التصاعدي
+        const counters = document.querySelectorAll('.counter-number');
+
+        // نستخدم IntersectionObserver لمراقبة متى يظهر العنصر على الشاشة
+        const observerOptions = {
+            root: null, // الشاشة
+            threshold: 0.5 // العداد يبدأ عندما يظهر 50% من العنصر
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                // إذا ظهر العنصر في الشاشة
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const updateCount = () => {
+                        const target = +counter.getAttribute('data-target'); // الرقم النهائي
+                        const count = +counter.innerText; // الرقم الحالي
+                        
+                        // سرعة العداد (كلما زاد الرقم زادت السرعة)
+                        const speed = target / 100; 
+
+                        if (count < target) {
+                            counter.innerText = Math.ceil(count + speed);
+                            setTimeout(updateCount, 20); // تحديث كل 20 ميلي ثانية
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCount();
+                     setTimeout(() => {
+                        updateCount();
+                    }, 2000);
+                    // إيقاف المراقبة بعد تشغيل العداد مرة واحدة
+                    observer.unobserve(counter);
+                }
+            });
+        }, observerOptions);
+
+        // تفعيل المراقبة على جميع العدادات
+        counters.forEach(counter => {
+            observer.observe(counter);
+        });
+    </script>
+ <script>
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        function openPopup() {
+            document.getElementById('popupOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closePopup() {
+            document.getElementById('popupOverlay').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        function handleOverlayClick(e) {
+            if (e.target === document.getElementById('popupOverlay')) closePopup();
+        }
+
+        function updateProgress() {
+            for (let i = 1; i <= totalSteps; i++) {
+                const dot = document.getElementById('dot' + i);
+                const lbl = document.getElementById('lbl' + i);
+                dot.classList.remove('active', 'done');
+                lbl.classList.remove('active');
+                if (i < currentStep) { dot.classList.add('done'); dot.innerHTML = '✓'; }
+                else if (i === currentStep) { dot.classList.add('active'); dot.innerHTML = i; lbl.classList.add('active'); }
+                else { dot.innerHTML = i; }
+            }
+            for (let i = 1; i < totalSteps; i++) {
+                const fill = document.getElementById('line' + i);
+                fill.style.width = (i < currentStep) ? '100%' : '0%';
+            }
+            document.getElementById('btnPrev').style.display = currentStep > 1 ? 'block' : 'none';
+            document.getElementById('btnNext').innerHTML = currentStep === totalSteps
+                ? 'إرسال الطلب <i class="fa fa-paper-plane me-2"></i>'
+                : 'التالي <i class="fa fa-arrow-left me-2"></i>';
+        }
+
+        function validateStep(step) {
+            let valid = true;
+            if (step === 1) {
+                const name = document.getElementById('f-name').value.trim();
+                const phone = document.getElementById('f-phone').value.trim();
+                setError('f-name', 'e-name', !name);
+                setError('f-phone', 'e-phone', !phone || phone.length < 8);
+                valid = name && phone && phone.length >= 8;
+            }
+            if (step === 2) {
+                const company = document.getElementById('f-company').value.trim();
+                const industry = document.getElementById('f-industry').value;
+                setError('f-company', 'e-company', !company);
+                setError('f-industry', 'e-industry', !industry);
+                valid = company && industry;
+            }
+            if (step === 3) {
+                const checked = document.querySelectorAll('#servicesGrid input:checked');
+                const hasServices = checked.length > 0;
+                document.getElementById('e-services').classList.toggle('show', !hasServices);
+                valid = hasServices;
+            }
+            return valid;
+        }
+
+        function setError(fieldId, errId, show) {
+            document.getElementById(fieldId).classList.toggle('error', show);
+            document.getElementById(errId).classList.toggle('show', show);
+        }
+
+        function nextStep() {
+            if (!validateStep(currentStep)) return;
+            if (currentStep < totalSteps) {
+                document.getElementById('step' + currentStep).classList.remove('active');
+                currentStep++;
+                document.getElementById('step' + currentStep).classList.add('active');
+                updateProgress();
+            } else {
+                submitForm();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                document.getElementById('step' + currentStep).classList.remove('active');
+                currentStep--;
+                document.getElementById('step' + currentStep).classList.add('active');
+                updateProgress();
+            }
+        }
+
+        function submitForm() {
+            const name     = document.getElementById('f-name').value;
+            const phone    = document.getElementById('f-phone').value;
+            const company  = document.getElementById('f-company').value;
+            const industry = document.getElementById('f-industry').value;
+            const services = [...document.querySelectorAll('#servicesGrid input:checked')].map(i => i.value).join('، ');
+
+            // Build summary
+            document.getElementById('summaryBox').innerHTML = `
+                <div class="summary-row"><span class="label">الاسم</span><span class="val">${name}</span></div>
+                <div class="summary-row"><span class="label">الهاتف</span><span class="val">${phone}</span></div>
+                <div class="summary-row"><span class="label">الشركة</span><span class="val">${company}</span></div>
+                <div class="summary-row"><span class="label">المجال</span><span class="val">${industry}</span></div>
+                <div class="summary-row"><span class="label">الأنظمة</span><span class="val">${services}</span></div>
+            `;
+
+            // Hide form, show success
+            document.getElementById('bodyWrap').style.display = 'none';
+            document.getElementById('popupFooter').style.display = 'none';
+            document.getElementById('successState').classList.add('show');
+
+            // Update header
+            document.querySelector('.popup-header h3').textContent = 'تم استلام طلبك! 🎉';
+            document.querySelector('.popup-header p').textContent = 'سنتواصل معك على ' + phone + ' قريبًا';
+        }
+
+        // Keyboard ESC close
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+    </script>
     <script>
         // Hide spinner
         window.addEventListener('load', function() {
             document.getElementById('spinner').classList.remove('show');
             document.querySelector('.back-to-top').style.display = 'none';
-            startCounters();
         });
 
         // Back to top
@@ -894,31 +1621,84 @@
             event.target.classList.add('active');
         }
 
-        // Counter animation
-        function animateCounter(el, target, suffix) {
-            let count = 0;
-            const step = Math.ceil(target / 60);
-            const timer = setInterval(() => {
-                count += step;
-                if (count >= target) { count = target; clearInterval(timer); }
-                el.textContent = count + (suffix || '+');
-            }, 30);
-        }
 
-        function startCounters() {
-            animateCounter(document.getElementById('c1'), 200);
-            animateCounter(document.getElementById('c2'), 350);
-            animateCounter(document.getElementById('c3'), 10);
-            animateCounter(document.getElementById('c4'), 15);
-        }
 
+        window.addEventListener('scroll', function checkCounters() {
+    const section = document.querySelector('.container-fluid.py-5');
+    
+    if (!section) return;
+
+    const rect = section.getBoundingClientRect();
+    const triggerPoint = window.innerHeight * 0.7; // ابدأ لما يكون 70% من الشاشة فوق السيكشن
+
+    if (rect.top < triggerPoint && !section.dataset.animated) {
+        section.dataset.animated = 'true';
+        console.log("تم التشغيل عن طريق السكرول");
+        // startCounters();
+    }
+});
+
+
+// دالة الـ counter (خلينا نستخدم النسخة الأصلية بتاعتك مع تعديل بسيط عشان تكون أكثر سلاسة)
+// function animateCounter(el, target) {
+//     let count = 0;
+//     const duration = 2000;          // المدة الكلية بالمللي ثانية (2 ثانية)
+//     const stepTime = 30;            // كل كام مللي ثانية نزود
+//     const steps = duration / stepTime;
+//     const increment = target / steps;
+
+//     const timer = setInterval(() => {
+//         count += increment;
+//         el.textContent = Math.ceil(count);
+//         if (count >= target) {
+//             el.textContent = target;
+//             clearInterval(timer);
+//         }
+//     }, stepTime);
+// }
+
+// // دالة تشغيل كل العدادات
+// function startCounters() {
+//     animateCounter(document.getElementById('c1'), 200);
+//     animateCounter(document.getElementById('c2'), 350);
+//     animateCounter(document.getElementById('c3'), 10);
+//     animateCounter(document.getElementById('c4'), 15);
+// }
+
+// // التشغيل الذكي لما السيكشن يظهر
+// document.addEventListener('DOMContentLoaded', () => {
+//     const section = document.querySelector('.container-fluid.py-5.wow.fadeInUp');
+
+//     if (!section) {
+//         console.warn("→ السيكشن مش موجود بالكلاس ده، تأكد من الكلاسات");
+//         // لو مش موجود → شغل فورًا ك fallback
+//         startCounters();
+//         return;
+//     }
+
+//     const observer = new IntersectionObserver(
+//         (entries) => {
+//             if (entries[0].isIntersecting) {
+//                 console.log("→ السيكشن دخل الشاشة، بدأنا العدادات");
+//                 startCounters();
+//                 observer.disconnect();  // وقف المراقبة نهائيًا
+//             }
+//         },
+//         {
+//             threshold: 0.25,               // ابدأ لما 25% من السيكشن يبان
+//             rootMargin: "0px 0px -120px 0px"  // ابدأ قبل ما يوصل الأسفل بـ 120px تقريبًا
+//         }
+//     );
+
+//     observer.observe(section);
+// });
         // Form submit
-        function submitForm() {
-            const name = document.getElementById('name').value;
-            if (!name) { alert('من فضلك أدخل اسمك'); return; }
-            document.getElementById('contact-form').style.display = 'none';
-            document.getElementById('form-success').style.display = 'block';
-        }
+        // function submitForm() {
+        //     const name = document.getElementById('name').value;
+        //     if (!name) { alert('من فضلك أدخل اسمك'); return; }
+        //     document.getElementById('contact-form').style.display = 'none';
+        //     document.getElementById('form-success').style.display = 'block';
+        // }
     </script>
 </body>
 </html>
